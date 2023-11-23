@@ -118,8 +118,9 @@ def sangres(So,Sa,Sb,Sab,Po,Pa,Pb,Pab):
 #La complejidad del algoritmo es O(1), por realizar solamente comparaciones entre las sangres y los pacientes
 #La idea para que se pueda dar sangre a la mayor cantidad de pacientes es hacerlo en el orden de menos a mas
 #posibilidades de sangre, para satisfacer a la amyor cantidad posible, de esa manera el algoritmo seria optimo
-#Es greedy ya que busca el orden optimo para ir dando sangre, hasta llegar
-#a dar a todos la sangre que necesitan o la mayor cantidad posible
+#Es greedy porque agarra, para aquellos que tienen una disponibilidad reducida según lo que necesitan, toda la
+#sangre disponible para ellos primero, y luego para los que tienen más de un tipo agota primero la de su tipo
+#y si no se sació la totalidad agota la sangre alternativa, consumiendo así la primera sangre disponible para ese tipo
 
 
 #EJERCICIO DE CATEDRA DE CLASE
@@ -208,3 +209,63 @@ print(mochila(15, [(10,5), (1,7), (3,5), (8,3), (1,1), (20,15)]))
 #Porque siempre va a haber una situacion donde el objeto con mayor
 #valor no entre a la mochila porque otros elemenos con mejor promedio pero menor valor
 #vayan antes que ese objeto
+
+#**************************************************************
+
+# Se tiene una matriz donde en cada celda hay submarinos, o no, y se quiere poner faros para iluminarlos a todos.
+# Implementar un algoritmo que Greedy que dé la cantidad mínima de faros que se necesitan para que todos los
+# submarinos queden iluminados, siendo que cada faro ilumina su celda y además todas las adyacentes (incluyendo las
+# diagonales), y las directamente adyacentes a estas (es decir, un “radio de 2 celdas”). Indicar y justificar la complejidad
+# del algoritmo implementado. ¿El algoritmo implementado da siempre la solución óptima?
+
+def submarinos_del_orto2(matriz):
+    faros_totales = {}
+    lista = []
+    submarinos_cubiertos_totales = []
+    for i in range(len(matriz)):
+        for j in range(len(matriz[i])):
+            if matriz[i][j] != "s":
+                submarinos_cubiertos = revisar_radio_2(matriz, i, j)
+                if len(submarinos_cubiertos) != 0:
+                    faros_totales[(i,j)] = submarinos_cubiertos
+                    
+    for faro, submarinos in faros_totales.items():
+        lista.append((faro, submarinos))
+    lista.sort(key=lambda x: len(x[1]), reverse=True)
+    
+    # consigo la cantidad minima de faros que cubran todos los submarinos
+    faros = 0
+    faros_ubicados = []
+    for faro in lista:
+        if revisar_submarino_cubierto(submarinos_cubiertos_totales, faro[1]):
+            for submarino in faro[1]:
+                if submarino not in submarinos_cubiertos_totales:
+                    submarinos_cubiertos_totales.append(submarino)
+            faros +=1
+            faros_ubicados.append(faro[0])
+
+    print(faros_ubicados)
+    print(faros)   
+
+def revisar_submarino_cubierto(submarinos_cubiertos, submarinos_por_ver):
+    for submarino in submarinos_por_ver:
+        if submarino not in submarinos_cubiertos:
+            return True
+    return False
+
+def revisar_radio_2(matriz, i, j):
+    submarinos = []
+    min_x, max_x = max(i - 2, 0), min(i + 2, len(matriz) - 1)
+    min_y, max_y = max(j - 2, 0), min(j + 2, len(matriz[0]) - 1)
+    for k in range(min_x, max_x +1):
+        for l in range(min_y, max_y+1):
+            if matriz[k][l] == "s":
+                submarinos.append((k, l))
+    return submarinos
+
+
+# La solución propuesta es greedy porque a medida que recorre la matriz verifica que la posición cubra la mayor cantidad de faros posibles,
+# pero no examina todas las posibilidades sino que se queda con la primera que encuentra.
+# El algoritmo no es optimo porque habra situaciones que un faro cubre la mayor cantidad de submarinos pero por elegir esa posición puede estar perdiendose de
+# cubrir a múltiples otros submarinos con menos faros, por esto es que el algoritmo al ser greedy y quedarse con la primera posición que encuentra no 
+# es óptimo 

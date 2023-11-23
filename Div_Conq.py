@@ -160,16 +160,73 @@ def _subarreglo_suma_maxima_te_odio_div_y_conq(lista, inicio, fin):
     return max(suma_izq, suma_der, suma_izq_max + suma_der_max)
 
 
+# a. Hacer un seguimiento del algoritmo de Quicksort, con selección aleatoria de pivot, para ordenar los siguientes
+# elementos: 45 14 24 35 16 11 30 15 39 19 41. Para las selecciones aleatorias de pivot, considerar que el primer
+# elemento elegido es el 16. Para las siguientes selecciones aleatorias tuvimos “suerte”, siempre se seleccionó el valor
+# de la mediana en cada caso.
+# b. Indicar la complejidad temporal esperada de Quicksort.
+# c. Mostrar un Árbol Binario de Búsqueda que, si se lo construye apropiadamente, realiza las mismas comparaciones
+# que el segumiento de Quicksort detallado anteriormente. Indicar de qué manera se construyó el árbol.
+# d. Indicar cuáles serían las peores selecciones de pivot e indicar en qué complejidad temporal resultaría.
+
+# *********************
+
+# Implementar un algoritmo que, por división y conquista, permita obtener la parte entera de la raíz cuadrada de un número 
+# n, en tiempo O(logn). Por ejemplo, para 
+# n=10 debe devolver 3, y para 
+# n=25 debe devolver 5.
+
+def _raiz_entera_todita(arr, inicio, fin, n):
+    if inicio == fin:
+        return arr[inicio]
+    medio = (inicio + fin) // 2
+    if arr[medio]**2 > n:
+        return _raiz_entera_todita(arr, inicio, medio - 1, n)
+    elif arr[medio]**2 < n:
+        return _raiz_entera_todita(arr, medio + 1, fin, n)
+    else:
+        return arr[medio]
+
+
+def raiz_entera_todita(n):
+    arr = [i for i in range(0, n)]
+    return _raiz_entera_todita(arr, 0, n - 1, n)
+
+def raiz_entera(n):
+    inicio, final = 0, n
+    while inicio <= final:
+        medio = (inicio + final) // 2
+        medio_cuadrado = medio*medio
+        if medio_cuadrado == n:
+            return medio_cuadrado
+        if medio_cuadrado < n:
+            inicio = medio + 1
+            resultado = medio
+            
+        else:
+            final = medio -1
+    
+    return resultado 
+        
+
 def main():
     #boyas = [(0,0), (3,25), (0,1)]
     #print(distancia_minima_puntos(boyas))
+
     #votos = [1, 3, 4, 1, 3, 1, 2, 1, 1]
     #print(lider_trolo(votos))
+
     #weaa = ["C1", "C2", "C3", "D1", "D2", "D3"]
     #print(wea(weaa))
+
     #numeros = [1, 2, 3, 4, 5, 6]
     #print(poronga_de_busqueda_con_div_y_conq_porque_soy_un_culo_y_no_se_hacer_busquedas(numeros))
-    lista = [-2, -5, 6, -2, -3, 1, 5, -6]
-    print(subarreglo_suma_maxima_te_odio_div_y_conq(lista))
+
+    # lista = [-2, -5, 6, -2, -3, 1, 5, -6]
+    # print(subarreglo_suma_maxima_te_odio_div_y_conq(lista))
+    
+    print(raiz_entera(10))
+
+    
 if __name__ == '__main__':
     main()
