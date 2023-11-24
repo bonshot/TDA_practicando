@@ -28,7 +28,7 @@
 #utilizando programación dinámica. Indicar y justificar el orden del algoritmo implementado.
 #Aclaración: siempre es posible escribir a n como suma de n términos de la forma 1**2, por lo que siempre existe solución.
 #Sin embargo, la expresión 10 = 3**2 + 1**2
-#es una manera más económica de escribirlo para n = 10, pues sólo tiene dostérminos. Además, tener en cuenta que no se piden los términos, 
+#es una manera más económica de escribirlo para n = 10, pues sólo tiene dostérminos. Además, tener en cuenta que no se piden los términos,
 #sino la cantidad mínima de términos cuadráticosnecesaria.
 
 #4. Realizar una reducción polinomial del problema del ejercicio 3 a otro de los vistos durante la cursada. Ayuda: pensar en
@@ -60,7 +60,7 @@ def cuadrados_minimizados2(n,s):
 #de caminos dentro de dicho grafo y un número k, ¿es posible seleccionar al menos k de esos caminos tales que ningún
 #par de ellos compartan ningún nodo?
 #Demostrar que Path Selection es un problema NP-Completo. Ayuda: este problema tiene mucha semejanza con
-#Independent Set. Recomandamos reducir dicho problema a Path Selection. 
+#Independent Set. Recomandamos reducir dicho problema a Path Selection.
 # Drama-turgo, a tu dama la mas-turbo >8)
 
 #p1-p2-p3-p1
@@ -74,37 +74,37 @@ def cuadrados_minimizados2(n,s):
 # Para reducir IS a PS me pego un tiro en la rodilla. No, mentira. Para reducir IS a PS, creamos un grafo G' con los mismos vértices que G,
 # y creamos un camino de longitud 2 entre cada par de vértices de G'. Luego, creamos un set de pedidos P1...Pc, donde cada pedido es un camino
 # de longitud 2. Por último creamos un k', que es el mismo que el k de IS. Si existe IS de tamaño K en G, entonces existe PS de K' en G'.
-# Esta reducción es en tiempo polinomial y como ya sabiamos de antes que IS es NP-Completo, podemos confirmar que Path selecction 
+# Esta reducción es en tiempo polinomial y como ya sabiamos de antes que IS es NP-Completo, podemos confirmar que Path selecction
 # tambien es NP-Completo
 #**********************************************************************************
 
 #... Modelo 01 de final ...
-#Se requiere realizar un viaje a través de un territorio de difícil acceso. 
-#El mismo se encuentra dividido en zonas por las que se debe pasar. 
-#Existen m facciones que controlan algunas de esas zonas. 
-#Una facción puede controlar más de 1 zona y una zona puede ser controlada por más de una. 
-#Para poder realizar el viaje se debe pactar con alguna de estas. 
-#Cada pacto con una facción nos asegura el paso seguro por todas las zonas que controlan independientemente de si alguna de sus zonas son 
-#también controladas por otras facciones. 
+#Se requiere realizar un viaje a través de un territorio de difícil acceso.
+#El mismo se encuentra dividido en zonas por las que se debe pasar.
+#Existen m facciones que controlan algunas de esas zonas.
+#Una facción puede controlar más de 1 zona y una zona puede ser controlada por más de una.
+#Para poder realizar el viaje se debe pactar con alguna de estas.
+#Cada pacto con una facción nos asegura el paso seguro por todas las zonas que controlan independientemente de si alguna de sus zonas son
+#también controladas por otras facciones.
 #Deseamos saber si es posible pactar con no más de k facciones para poder concretar el viaje de forma segura.
 #Se pide: Demostrar que el problema es NP-Completo.
 #HINT: Se puede utilizar Vertex Cover.
 
-# Deseamos ver si podemos con una facción cubrir todas las zonas, entonces modelando con un grafo, cada facción es un vértice y las zonas son  
+# Deseamos ver si podemos con una facción cubrir todas las zonas, entonces modelando con un grafo, cada facción es un vértice y las zonas son
 # aristas, si existe un Vertex Cover, entonces existe un pacto con no más de K facciones para poder concretar el viaje. Para esto, reducimos
-# Vertex Cover a este problema. 
-# Reducción: 
+# Vertex Cover a este problema.
+# Reducción:
 # Creamos un G' con mismos vértices que G, creamos un vértice V, y conectamos con todos los de G', luego creamos un set de zonas Z, donde cada
 # zona es una arista de G'. Luego un K'. Si existe VC de tam K en G, entonces existe pacto con no más de K' facciones para el viaje en G'.
 # Reducimos VC a este problema en tiempo polinomial, y sabemos que VC es NP-C, entonces este problema también lo es.
 
 #**********************************************************************************
 
-#4) La siguiente es una versión de Independet Set. 
-#Dado un grafo G= (V, E) y un entero k, 
-#decimos que I ⊆ V es fuertemente independiente si dados dos vértices u y v en I, 
-#la arista (v, u) no pertenece a E y además no hay ningún camino de tamaño 2 (con dos aristas) de u a v. 
-#El problema de Strongly Independent Sets consiste en decidir si G tiene un conjunto fuertemente independiente de tamaño al menos k. 
+#4) La siguiente es una versión de Independet Set.
+#Dado un grafo G= (V, E) y un entero k,
+#decimos que I ⊆ V es fuertemente independiente si dados dos vértices u y v en I,
+#la arista (v, u) no pertenece a E y además no hay ningún camino de tamaño 2 (con dos aristas) de u a v.
+#El problema de Strongly Independent Sets consiste en decidir si G tiene un conjunto fuertemente independiente de tamaño al menos k.
 #Probar que el problema de Strongly Independent Sets es NP completo (y para eso usar que Independent Set es NP completo).
 
 #primero demostramos que SIS es NP, para verificar la solución en tiempo polinomial, vemos si la cantidad de vértices en el conjunto
@@ -125,7 +125,7 @@ def cuadrados_minimizados2(n,s):
 
 # Este problema es NP ya que podemos recorrer el grafo de cursos viendo si sus cursos adyacentes (cursos que comparten alumnos)
 # comparten una misma fecha de final. Esto lo haria O(V+E) ya que hacemos BFS.
- 
+
 # Los vértices son los cursos (que van a la fecha de color X) y las aristas son los alumnos en común que tienen los cursos. Si existe
 # un k-coloreo, entonces existe una posible asignación de exámenes por fecha. Para esto reducimos k-coloreo a este problema. De esa forma
 # podemos ver que este problema es NP-C.
@@ -139,7 +139,7 @@ def cuadrados_minimizados2(n,s):
 # sumen exactamente un número dado de tamaño total. Demostrar que este problema es NP-Completo.
 # HINT: Se puede usar Subset Sum.
 
-# Este problema es NP ya que podemos recorrer el arreglo de porongas viendo si la suma de porongas es igual al tamaño total y corroborar que 
+# Este problema es NP ya que podemos recorrer el arreglo de porongas viendo si la suma de porongas es igual al tamaño total y corroborar que
 # los subconjuntos de porongas que nos da, son las correctas ---> O(n).
 
 # Reducción de Subset Sum a este problema:
@@ -181,6 +181,55 @@ def cuadrados_minimizados2(n,s):
 #red de transporte. ¿Se puede concluir si alguno de estos problemas es NP-Completo, o que no lo sea? ¿Estos problemas
 #pertenecen a PSPACE? Justificar adecuadamente cada respuesta.
 
-#5) Ninguno es NP-Completo, el primero se resuelve con una red de flujo y el segundo es un algoritmo de flujo máximo en una red. 
+#5) Ninguno es NP-Completo, el primero se resuelve con una red de flujo y el segundo es un algoritmo de flujo máximo en una red.
 # Ambos problemas pertenecen a PSPACE ya que se resuelven de manera polinomial con un tamaño en memoria proporcional al tamaño de la entrada
 # es decir, lineal.
+
+# ************************************************************************************
+# 5) Para un evento a realizar se requiere conformar una selección
+# musical entre el conjunto A de “n” canciones. Podemos enumerar a
+# los elementos de A como a1,a2,...,an. Por otra parte, contamos con
+# un conjunto “B” de “m” personas. Cada una de ellas con un subsets
+# de esas canciones que le gustan. Deseamos saber si podemos
+# seleccionar un subconjunto de no más de “k” canciones, de tal
+# forma que existe al menos 1 canción que le gusta a cada uno.
+# Se pide: Demostrar que el problema es NP-Completo.
+
+# HINT: Se puede utilizar Vertex Cover.
+
+
+# Para demostrar que este problema es NP-Completo, primero tenemos que demostrar que sea NP
+#  y luego mostrar que un problema NP-completo, sea reducible a este problema.
+
+# 1)Para eso primero podemos crear un certificador polinomial,
+# tomamos del problema, el conjunto de personas y el k conjunto de canciones y la solucion esperada.
+# Para eso realizamos un bfs y vamos agregando las aristas (el nombre de la persona) a visitados, 
+# y chequeamos que el largo de set de visitados (personas diferentes encontradas en aristas del grafo)
+# sea el largo del conjunto de personas totales. O(V + E) = O(m + n) = O(n) siendo polinomial.
+
+# 2) Para reducir vertex cover a este problema tenemos que pensar lo siguiente:
+# En 
+
+# ***********************************
+# El proyecto de colonización de Marte lleva años desarrollándose en
+# secreto. En una nueva etapa se requieren N granjeros-espaciales
+# para terraformar una hectárea del suelo marciano. Se realizó una
+# amplia búsqueda de candidatos “r” (r>>n), siendo todos ellos
+# capaces. Dadas las duras condiciones que enfrentarán, es
+# primordial que sean compatibles entre ellos. Se realizaron
+# complejos estudios psicológicos y se construyó una tabla donde
+# para cada granjero se indica con cuáles otros puede trabajar sin
+# conflictos. En este momento quieren saber si los candidatos
+# disponibles pueden armar la tripulación necesaria.
+# Demuestre que lo solicitado es NP-COMPLETO
+
+# HINT!: Tal vez le resulte útil clique
+
+# 1)Primero buscamos un certificador polinomial. Dado Los candidatos y N,
+# verificamos que el subconjunto de granjeros-espaciales elegidos sean N por lo menos.
+
+# 2) Creamos un Grafo (V,E) y creamos un N con un valor similar al del K deseado, utilizamos
+#    la "caja negra" de este problema y vemos si existe un conjunto de granjeros que sean compatibles entre todos
+#    y que sean por lo menos N. Si existe, entonces existe un clique de tamaño N en G, y por ende el problema es NP-C
+
+#***********************************************
