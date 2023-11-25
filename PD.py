@@ -229,6 +229,8 @@ def subset(conjunto,numero):
     print(opt)
     return opt[n][numero]
 
+
+
 def main():
     # print(cuadrados_minimizados(6))
     # print(cuadrados_minimizados2(6))

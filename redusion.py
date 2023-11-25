@@ -1,27 +1,3 @@
-#5. En el reino de Gondor ha incrementado enormemente la delincuencia luego de su urbanización. El rey Aragorn no
-#quiere que todo su esfuerzo en construir calles resulte en vano, por lo que quiere poner guardianes a vigilar las calles por
-#las noches. El problema es que cuesta mucho dinero entrenar a dichos guardianes, por lo que quiere reducir al mínimo
-#la cantidad que sean necesarios entrenar. Sabe que cada guardian puede estar vigilando desde una esquina, y desde allí
-#tener visibilidad hasta cualquier otra esquina directa. Necesita determinar la cantidad mínima de guardianes que son
-#necesarios para cubrir todas las calles de su reino. Como primera medida, consulta con el oráculo Alumnus Teorius
-#Algoritmus (es decir, quien lee esta consigna), para determinar si esto es conseguible en corto tiempo (el oráculo le
-#pregunó algo sobre tiempo polinomial, que Aragorn no entendió y le dijo “si, eso”).
-#Tenemos que explicarle a Aragorn que este pedido no es realizable (y debe armarse de paciencia, o no buscar el mínimo
-#exacto), porque el problema de Guardianes de Gondor es, en realidad, un problema NP-Completo (en su versión de
-#problema de decisión: “¿Se pueden vigilar todas las calles con esta topología con máximo K guardianes?”).
-
-# A este problema lo podemos reducir a Vertex Cover, ya que la idea es que los vértices sean los guardianes y
-# las aristas sean las calles, entonces si un vértice está en el vertex cover, significa que ese guardián puede ver
-# todas las calles que conectan a ese vértice, si no está en el vertex cover no. Entonces si el vertex cover
-# es de tamaño K, podemos ver con K guardianes todas las calles. Ahora, el problema de Vertex Cover es NP-Completo,
-# si logramos reducir el problema Vertex Cover al de los Guardianes, entonces el de los guardianes será NP-Completo.
-# Reducción:
-# Sea G = (V, E) un grafo, y K un entero. Queremos saber si existe un Vertex Cover de tamaño K. Entonces, creamos
-# un grafo G' con mismos vértices y aristas que G, luego agregamos un vértice v a G' y lo conectamos con todos los
-# vértices de G. Si existe un Vertex Cover de K vértices en G, entonces existe un VC de K+1 vértices en G'.
-# Si pasa esto, entonces existe un VC de K vértices en G, por lo que reduje Vertex Cover a Guardianes de Gondor.
-# Con esto Guardianes de Gondor es NP-Completo. Culo
-
 #****************************************************************************************************************************
 
 #3.Dado un número n, mostrar la cantidad más económica (con menos términos) de escribirlo como una suma de cuadrados,
@@ -197,18 +173,33 @@ def cuadrados_minimizados2(n,s):
 
 # HINT: Se puede utilizar Vertex Cover.
 
+#1)El problema es claramente de verificacion en tiempo polinomial, ya que podemos 
+# verificar rapidamente si un subconjunto de canciones satisface la condicion de que 
+# hayaa al menos una cancion que le guste a cada persona en B. Por eso, dado un subconjunto 
+# de canciones, simplemente verificamos si para cada persona en B hay almenos una cancion
+# en el subconjunto que le gusta. Esta verificacion nos confirmaria que el problema es NP
+def verificador(conjunto_B, conjunto_A, solucion):
+    if len(solucion) > k:
+        return False
+    for persona in conjunto_B:
+        le_gusta = False
+        for cancion in solucion:
+            if cancion in conjunto_A[persona]:
+                le_gusta = True
+                break
+        if not le_gusta:
+            return False
+    return True
 
-# Para demostrar que este problema es NP-Completo, primero tenemos que demostrar que sea NP
-#  y luego mostrar que un problema NP-completo, sea reducible a este problema.
-
-# 1)Para eso primero podemos crear un certificador polinomial,
-# tomamos del problema, el conjunto de personas y el k conjunto de canciones y la solucion esperada.
-# Para eso realizamos un bfs y vamos agregando las aristas (el nombre de la persona) a visitados, 
-# y chequeamos que el largo de set de visitados (personas diferentes encontradas en aristas del grafo)
-# sea el largo del conjunto de personas totales. O(V + E) = O(m + n) = O(n) siendo polinomial.
-
-# 2) Para reducir vertex cover a este problema tenemos que pensar lo siguiente:
-# En 
+#2)Ahora para reducir Vertex cover al problema de seleccion musical, creamos un 
+# Grafo G, su conjunto de vertices V y su conjunto de aristas E,
+# construimos una instancia equivalente del problema:
+# Construccion de A: asociamos cada vertice i de V con una cancion unica Ai en A
+# Construccion de B: asociamos cada arista (i,j) de E con una persona unica en Bj en B
+# K' = K de Vertex Cover
+# Reducción: Si existe un conjunto de vertices de tamaño K que cubre todas las 
+# aristas en G, entonces existe un subconjunto de canciones de tamaño K' que le gusta a cada persona en B.
+# Por lo tanto, el problema de selección musical es NP-Completo.
 
 # ***********************************
 # El proyecto de colonización de Marte lleva años desarrollándose en
@@ -225,11 +216,58 @@ def cuadrados_minimizados2(n,s):
 
 # HINT!: Tal vez le resulte útil clique
 
-# 1)Primero buscamos un certificador polinomial. Dado Los candidatos y N,
-# verificamos que el subconjunto de granjeros-espaciales elegidos sean N por lo menos.
+# 1)El problema se puede verificar en tiempo polinomial. Dado un conjunto r de granjeros
+# me fijo si existe n granjeros espaciales. Para eso, me fijo cada granjero, y voy viendo
+# si tiene relacion con todo el resto de granjeros, hasta llegar a conseguir un conjunto de n granjeros
+# que almenos conozcan a uno de ese conjunto elegido.
 
-# 2) Creamos un Grafo (V,E) y creamos un N con un valor similar al del K deseado, utilizamos
-#    la "caja negra" de este problema y vemos si existe un conjunto de granjeros que sean compatibles entre todos
-#    y que sean por lo menos N. Si existe, entonces existe un clique de tamaño N en G, y por ende el problema es NP-C
+def verificador_grafo_completo(conexiones, granjeros, n):
+    if len(granjeros) > n:
+        return False
+    for granjero in granjeros:
+        for granjero2 in granjeros:
+            if granjero != granjero2 and (granjero, granjero2) not in conexiones:
+                    return False
+    return True
+
+# 2) Ahora para reducir Clique al problema de los granjeros espaciales, 
+# creamos un Grafo G, su conjunto de vertices V y su conjunto de aristas E.
+# Construimos una instancia equivalente del problema:
+# Construccion de R: asociamos cada i de V con un granjero unico Ri en R
+# Construccion de Relacion: asociamos cada arista (i,j) de E con una relacion entre dos 
+# granjeros
+# Tamaño de granjeros necesario = N de igual tamaño del clique deseado
+# Reducción: Si existe un clique de tamaño N en G, entonces existe un conjunto de granjeros
+# de tamaño N que pueden trabajar sin conflictos. Por lo que el problema de granjeros espaciales
+# es PENE-Completo.
 
 #***********************************************
+#5. En el reino de Gondor ha incrementado enormemente la delincuencia luego de su urbanización. El rey Aragorn no
+#quiere que todo su esfuerzo en construir calles resulte en vano, por lo que quiere poner guardianes a vigilar las calles por
+#las noches. El problema es que cuesta mucho dinero entrenar a dichos guardianes, por lo que quiere reducir al mínimo
+#la cantidad que sean necesarios entrenar. Sabe que cada guardian puede estar vigilando desde una esquina, y desde allí
+#tener visibilidad hasta cualquier otra esquina directa. Necesita determinar la cantidad mínima de guardianes que son
+#necesarios para cubrir todas las calles de su reino. Como primera medida, consulta con el oráculo Alumnus Teorius
+#Algoritmus (es decir, quien lee esta consigna), para determinar si esto es conseguible en corto tiempo (el oráculo le
+#pregunó algo sobre tiempo polinomial, que Aragorn no entendió y le dijo “si, eso”).
+#Tenemos que explicarle a Aragorn que este pedido no es realizable (y debe armarse de paciencia, o no buscar el mínimo
+#exacto), porque el problema de Guardianes de Gondor es, en realidad, un problema NP-Completo (en su versión de
+#problema de decisión: “¿Se pueden vigilar todas las calles con esta topología con máximo K guardianes?”).
+
+#1) Podemos verificar en tiempo polinomial si es posible vigilar todas las calles con K guardianes. Vemos tener K guardianes
+#   luego vemos si cada calle tiene almenos un guardia vigilandola. Para esto basta con recorrer el arreglo de calles y 
+#   ver que tenga uno de sus extremos en la solución propuesta. Esto es O(n). Por lo tanto es NP
+
+#2) Sabemos que este problema se asemeja al vertex cover y es np completo
+# Pero a nosotros nos importa sacar que el problema de los guardianes es Np-Completo,
+# por lo tanto vamos a reducir un problema np-completo a uno que momentaneamente es np,
+# para confirmar que si el problema de guardianes es np-completo
+#Para eso creamos un grafo G, su conjunto de vertices V y su conjunto de aristas E.
+# Construimos una instancia equivalente del problema antes de usar el problema de los guardianes.
+# Construccion de Esquinas: asociamos cada i de V como una esquina i en esquinas
+# Construccion de calles: asociamos cada arista (i,j) de E con una calle unica
+# Tamaño de esquinas elegidas = N de igual tamaño de vertices para que un grafo sea vertex cover
+#Reduccion: Si existe un vertex cover de tamaño N en G, entonces existe un conjunto de esquinas elegidas
+# de tamaño N para que se puedan cubrir todas las calles. Por lo que el problema de los guardianes 
+# es NP-Completo. 
+
