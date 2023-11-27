@@ -229,7 +229,91 @@ def subset(conjunto,numero):
     print(opt)
     return opt[n][numero]
 
+#*********************************************RECU**************************************
+# Un bodegón tiene una única mesa larga con W lugares. Hay una persona en la puerta que anota los grupos que quieren
+# sentarse a comer, y la cantidad de integrantes que conforma a cada uno. Para simplificar su trabajo, se los anota en
+# un vector P donde P[i] contiene la cantidad de personas que integran el grupo i, siendo en total n grupos. Como se
+# trata de un restaurante familiar, las personas sólo se sientan en la mesa si todos los integrantes de su grupo pueden
+# sentarse. Implementar un algoritmo que, mediante programación dinámica, obtenga el conjunto de grupos que ocupan
+# la mayor cantidad de espacios en la mesa (o en otras palabras, que dejan la menor cantidad de espacios vacíos). Indicar
+# y justificar la complejidad del algoritmo.
+#[2,1,3,5,2,6] W= 12
 
+
+def bodegon_de_mierda(W, familias_chotas):
+    n = len(familias_chotas)
+    mesa = [[0] * (W + 1) for i in range(n+1)]
+    anterior = 0
+    for i in range(1, n+1):
+        for j in range(1, W+1):
+            if familias_chotas[i-1] > j:
+                mesa[i][j] = mesa[i-1][j]
+            else:
+                mesa[i][j] = max(mesa[i-1][j], mesa[i-1][j-familias_chotas[i-1]] + familias_chotas[i-1])
+    
+    res = []
+    i,j = n,W
+    while i > 0 and j > 0:
+        if mesa[i][j] != mesa[i-1][j]:
+            res.append(familias_chotas[i-1])
+            j -= familias_chotas[i-1]
+        i-=1
+    print(res)
+    print(mesa[n][W])
+    return mesa
+        
+
+
+# Dado un número n, mostrar la cantidad más económica (con menos términos) de escribirlo como una suma de cuadrados,
+# utilizando programación dinámica. Indicar y justificar el orden del algoritmo implementado.
+# Aclaración: siempre es posible escribir a n como suma de n términos de la forma 1**2, por lo que siempre existe solución.
+# Sin embargo, la expresión 10 = 3**2 + 1**2 es una manera más económica de escribirlo para n = 10, pues sólo tiene dos
+# términos. Además, tener en cuenta que no se piden los términos, sino la cantidad mínima de términos cuadráticos
+# necesaria.
+
+def suma_cuadrados(n):
+    cuadrados = [x**2 for x in range(1,n)]
+    res = [float("inf")]*(n+1)
+    res[0] = 0
+    for i in range(1, n+1):
+        minimo = i
+        for j in cuadrados:
+            if i >= j: 
+                minimo = min(i, 1 + res[i-j])
+        res[i] = minimo
+    return res[n]
+    
+
+
+# Realizar una reducción polinomial del problema del ejercicio 3 a otro de los vistos durante la cursada. Ayuda: pensar en
+# alguno de los vistos de programación dinámica.
+
+# Este problema se puede reducir polinomialmente al problema del cambio.
+# Construimos una instancia equivalente del problema del cambio:
+# Sistema monetario = asociamos la lista de cuadrados de 1 a n-1 como cada billete del sistema monetario
+# Moneda = asociamos el n del problema de cuadrados como la moneda a la que queremos llegar
+# La clave para la reduccion es establecer una relacion entre la suma de cuadrados con un valor n y una 
+# lista de cuadrados, y el problema del cambio con una moneda y sus sistema monetario
+#*Si existe una combinacion minima de sumas de cuadrados para llegar a N, entonces podemos
+#llegar a una combinacion minima de billetes para llegar a la moneda. Esto se da porque:
+# ** Dado que en la suma de cuadrados, la idea es buscar la minimca cantidad de cuadrados para llegar a N.
+#    Si tomamtos los billetes asociados a los cuadrados, y sumamos mínimos parciales (en cantidad) de billetes, al haber 
+#    evaluado todos los cuadrados, vamos a tener la mínima cantidad de billetes para llegar a la moneda.
+#
+# Por lo tanto, existe un conjunto de suma de cuadrados minimos para llegar a N si solo si,
+# existe un conjunto de monedas del sistema monetario para llegar a la moneda final.
+# Por lo tanto, logramos reducir el problema de los cuadrados al problema del cambio  
+
+
+
+# Dada una soga de n metros (n ≥ 2) implementar un algoritmo que, utilizando programación dinámica, permita cortarla
+# (en partes de largo entero) de manera tal que el producto del largo de cada una de las partes resultantes sea máximo. El
+# algoritmo debe devolver el valor del producto máximo alcanzable. Indicar y justificar la complejidad del algoritmo.
+# Ejemplos:
+# n = 2 --> Debe devolver 1 (producto máximo es 1 * 1)
+# n = 3 --> Debe devolver 2 (producto máximo es 2 * 1)
+# n = 5 --> Debe devolver 6 (producto máximo es 2 * 3)
+# n = 10 -> Debe devolver 36 (producto máximo es 3 * 3 * 4)
 
 def main():
     # print(cuadrados_minimizados(6))
@@ -248,6 +332,7 @@ def main():
     # peso =[5,10,12]
     # capacidad=27
     # print(mochila(capacidad, valor, peso))
-    print(subset([1, 3, 5, 8, 10],7))
-
+    #print(subset([2,1,3,5,2,6],12))
+    # print(bodegon_de_mierda(11, [7,10,2,1,9,3]))
+    print(suma_cuadrados(25))
 main()

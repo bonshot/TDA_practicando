@@ -197,6 +197,24 @@ def verificador(conjunto_B, conjunto_A, solucion):
 # Construccion de A: asociamos cada vertice i de V con una cancion unica Ai en A
 # Construccion de B: asociamos cada arista (i,j) de E con una persona unica en Bj en B
 # K' = K de Vertex Cover
+# Relación entre los Problemas:
+# La clave para la reducción es establecer una relación entre la existencia de un Vertex Cover de tamaño
+# k′ en G y la existencia de un subconjunto de canciones de tamaño k′que le guste a cada persona en B.
+# *Si existe un Vertex Cover S de tamaño k′ en G, entonces podemos tomar las canciones asociadas a los vértices en S como el subconjunto de canciones en 
+# A, y cada persona en B tendrá al menos una canción de ese subconjunto.
+#           *Dado que S es un Vertex Cover, cada arista (i,j) en E debe tener al menos uno de sus extremos en S.
+#           *Si tomamos las canciones asociadas a los vértices en S como el subconjunto de canciones en A, 
+#           entonces cada arista (i,j) estará representada por al menos una canción en el subconjunto.
+#           *Por lo tanto, cada persona Bij en B (asociada a la arista (i,j)) tendrá al menos una canción en el subconjunto que le gusta.
+# # *Si no existe un Vertex Cover S de tamaño k′ en G, entonces no hay suficientes vértices para cubrir todas las aristas, 
+# # lo que significa que hay al menos una arista sin ninguno de sus extremos en S. Entonces, no podemos encontrar un subconjunto de canciones en 
+# # A que le guste a cada persona en B.
+#         *Si S no es un Vertex Cover, significa que hay al menos una arista (i,j) en E tal que ambos extremos 
+#         i y j no están en S.
+
+#         *Esto implica que no hay una canción asociada a i o j en el subconjunto de canciones A. 
+#         Por lo tanto, no podemos construir un subconjunto de canciones en A que satisfaga la condición de que cada persona en 
+#         B tenga al menos una canción que le guste.
 # Reducción: Si existe un conjunto de vertices de tamaño K que cubre todas las 
 # aristas en G, entonces existe un subconjunto de canciones de tamaño K' que le gusta a cada persona en B.
 # Por lo tanto, el problema de selección musical es NP-Completo.
