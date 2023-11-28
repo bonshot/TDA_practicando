@@ -52,9 +52,50 @@ def libros_de_mierda(L, libros):
 # Al mismo tiempo, si no encuentra un dominating set de tamaño k, es porque no existe solución (no hubo forma de cubrir las aristas, básicamente).
 # Notar que esta solución es análoga a la de Independent Set -> Path Selection.
 
+##########################################################################################################################
+# Somos ayudantes del gran ladrón el Lunático, que está pensando en su próximo atraco. Decidió en este caso robar
+# toda una calle en un barrio privado, que tiene la particularidad de ser circular. Gracias a los trabajos de inteligencia
+# realizados, sabemos cuánto se puede obtener por robar en cada casa. Podemos enumerar a la primer casa como la casa
+# 0, de la cual podríamos obtener g0, la casa a su derecha es la 1, que nos daría g1, y así hasta llegar a la casa n − 1, que
+# nos daría gn−1. Como la calle es circular, la casa 0 y la n − 1 son vecinas. El problema con el que cuenta el Lunático
+# es que sabe de experiencias anteriores que, si roba en una casa, los vecinos directos se enterarían muy rápido. No le
+# daría tiempo a luego intentar robarles a ellos. Es decir, para robar una casa debe prescindir de robarle a sus vecinos
+# directos. El Lunático nos encarga saber cuáles casas debería atracar y cuál sería la ganancia máxima obtenible. Dado
+# que nosotros nos llevamos un porcentaje de dicha ganancia, vamos a buscar el óptimo a este problema. Implementar un
+# algoritmo que, por programación dinámica, obtenga la ganancia óptima, así como cuáles casas habría que robar, a
+# partir de recibir un arreglo de las ganancias obtenibles. Para esto, escribir y describir la ecuación de recurrencia que
+# correspondiente. Indicar y justificar la complejidad del algoritmo propuesto.
+
+#Este problema se asemeja al juan del vago, donde la ecuacion de recurrencia llevaba a opt[i] = max(opt[i-1], opt[i-2] + casa[i])
+#El tema es que nos da la condicion de que el barrio es circular, entonces no podria pasar que robo en la casa 0 y luego en la casa n-1, porque
+#se enteraria el barrio
+#Por eso la idea es buscar la ganancia maxima entre recorrer desde 0 a n-2 o  de 1 a n-1
+#[10,12,5,8,9,2,4]
+def juan_del_vago_ahora_ladron(casas):
+    if len(casas) == 0:
+        return []
+    if len(casas) == 1:
+        return [casas[0]]
+    n = len(casas)
+    
+
+    ganancia1 = juan_del_vago_casa(casas, 0, n-2, n)
+    ganancia2 = juan_del_vago_casa(casas, 1, n-1, n)
+    return ganancia1[n-2] if ganancia1[n-2] > ganancia2[n-1] else ganancia2[n-1]
+
+
+def juan_del_vago_casa(casas, inicio, fin, n):
+    res = [0] * (n)
+
+    res[inicio] = casas[inicio]
+    res[inicio+1] = max(casas[inicio], casas[inicio+1])
+
+    for i in range(inicio+2,fin+1):
+        res[i] = max(res[i-1], res[i-2] + casas[i])
+    return res
 
 
 def main():
-    print(libros_de_mierda(7, [3,3,2,2,2,2]))
-
+    # print(libros_de_mierda(7, [3,3,2,2,2,2]))
+    print(juan_del_vago_ahora_ladron([10,12,5,8,9,2,4]))
 main()
