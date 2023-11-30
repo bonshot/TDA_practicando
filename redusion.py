@@ -99,15 +99,7 @@ def cuadrados_minimizados2(n,s):
 #exámenes por fecha. Se pide: Demostrar que el problema es NP-Completo.
 #HINT: Se puede utilizar K-coloreo de grafos.
 
-# Este problema es NP ya que podemos recorrer el grafo de cursos viendo si sus cursos adyacentes (cursos que comparten alumnos)
-# comparten una misma fecha de final. Esto lo haria O(V+E) ya que hacemos BFS.
-
-# Los vértices son los cursos (que van a la fecha de color X) y las aristas son los alumnos en común que tienen los cursos. Si existe
-# un k-coloreo, entonces existe una posible asignación de exámenes por fecha. Para esto reducimos k-coloreo a este problema. De esa forma
-# podemos ver que este problema es NP-C.
-# Entonces a la "caja negra" de este problema le metemos un arreglo de colores que son las fechas y un grafo que es el de los cursos para
-# ver si existe una posible asignación tal que los "colores" (fechas) que le pasamos
-# no se choquen entre sí. Si existe una posible asignación, entonces existe un k-coloreo, y por ende el problema es NP-C.
+#
 
 #**********************************************************************************
 
@@ -115,12 +107,6 @@ def cuadrados_minimizados2(n,s):
 # sumen exactamente un número dado de tamaño total. Demostrar que este problema es NP-Completo.
 # HINT: Se puede usar Subset Sum.
 
-# Este problema es NP ya que podemos recorrer el arreglo de porongas viendo si la suma de porongas es igual al tamaño total y corroborar que
-# los subconjuntos de porongas que nos da, son las correctas ---> O(n).
-
-# Reducción de Subset Sum a este problema:
-# Creamos un set de porongas P, donde cada poronga es un número. Creamos un T total. Si existe un subconjunto de porongas que sumen T
-# entonces existe un Subset Sum de T en P. La reducción es en tiempo polinomial y como SS es NP-C, entonces este problema también lo es.
 
 #**********************************************************************************
 
@@ -135,15 +121,6 @@ def cuadrados_minimizados2(n,s):
 #Se pide: Demostrar que el problema es NP-Completo.
 #HINT: Se puede utilizar K-coloreo de grafos.
 
-#Este problema es Np ya que podemos recorrer el grafo de paneles y ver que los paneles adyacentes (que comparten oradores)
-#no tengan la misma fecha de presentacion. Seria O(V+E) ya que hacemos BFS
-
-# Queremos demostrar que este problema es NP-C, para eso reducimos K-Coloreo a este problema (por transitividad).
-# Reducción:
-# Tenemos un conjunto de paneles, un conjunto de oradores y un j' de jornadas. Llamamos a K-Paneles con estos parametros y de esta manera obtenemos
-# si es posible asignar a todos los paneles por jornada. De esta manera, podemos afirmar que si tenemos un K-paneles con paneles, oradores y J', podemos tener
-# un K-colores con V y E y un K. De esta manera podemos concluir que K-Paneles es NP-C
-#   K-Coloreo <=p K-paneles
 
 #*******************************************************************************************************************
 #4. Carlos tiene un problema: sus 5 hijos no se soportan. Esto es a tal punto, que ni siquiera están dispuestos a caminar

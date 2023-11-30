@@ -155,21 +155,50 @@ def revisar_radio_2(matriz, i, j):
                 submarinos.append((k, l))
     return submarinos
 
-#7)Se cuenta con “n” trabajos por realizar y la misma cantidad de contratistas para realizarlos. 
-# Ellos son capaces de realizar cualquiera de los trabajos aunque una vez que se comprometen a hacer uno, no podrán realizar el resto.
-# Tenemos un presupuesto de cada trabajo por cada contratista. Queremos asignarlos de forma tal de minimizar el costo del trabajo total. 
-# Proponer un algoritmo por branch and bound que resuelva el problema de la asignación. 
+#*******************************************************************************************************************
+# Un bodegón tiene una única mesa larga con W lugares. Hay una persona en la puerta que anota los grupos que quieren
+# sentarse a comer, y la cantidad de integrantes que conforma a cada uno. Para simplificar su trabajo, se los anota en
+# un vector P donde P[i] contiene la cantidad de personas que integran el grupo i, siendo en total n grupos. Como se
+# trata de un restaurante familiar, las personas sólo se sientan en la mesa si todos los integrantes de su grupo pueden
+# sentarse. Implementar un algoritmo que, mediante programación dinámica, obtenga el conjunto de grupos que ocupan
+# la mayor cantidad de espacios en la mesa (o en otras palabras, que dejan la menor cantidad de espacios vacíos). Indicar
+# y justificar la complejidad del algoritmo.
+# Resolver el problema del ejercicio 1 utilizando Backtracking.
 
-#8)Contamos con un conjunto de “n” de equipamientos que se deben repartir entre un conjunto de “m” equipos de desarrollo. 
-#  Cada equipo solicita un subconjunto de ellas. Puede ocurrir que un mismo equipamiento lo soliciten varios equipos o incluso que un equipamiento no lo solicite nadie. 
-#  Queremos determinar si es posible seleccionar un subconjunto de equipos de desarrollo entregándoles a todos ellos todo lo que soliciten 
-#  y al mismo tiempo que ninguno de los equipamientos quede sin repartir. Resolver el problema mediante backtracking.
+def bodegon_backtracking(W, familias, indice, asignacion_actual, mejor_asignacion):
+    if indice == len(familias):
+        if sum(asignacion_actual) > sum(mejor_asignacion):
+            mejor_asignacion = asignacion_actual
+        return mejor_asignacion
+    else:
+        if sum(asignacion_actual) + familias[indice] <= W:
+            mejor_asignacion = bodegon_backtracking(W, familias, indice + 1, asignacion_actual + [familias[indice]], mejor_asignacion)
+        mejor_asignacion = bodegon_backtracking(W, familias, indice + 1, asignacion_actual, mejor_asignacion)
+    return mejor_asignacion
+#La complejidad de algoritmo es O(2**n) por realizar los llamados recusrivos sin importar
+#que comparado a fuerza bruta, realizamos una cierta poda en el ejercicio
 
+#*****************************************
+# Un camino hamiltoniano es un camino de un grafo, que visita todos los
+# v´ertices del grafo una sola vez. Si adem´as el ´ultimo v´ertice visitado es
+# adyacente al primero, el camino es un ciclo hamiltoniano.
+def camino_hamiltoniano_dfs ( grafo , v , visitados , camino ) :
+    vistitados.add(v)
+    camino.append (v)
+    if len(visitados)== len (grafo): return True
+    for w in grafo.adyacentes (v):
+        if w not in visitados:
+            if camino_hamiltoniano_dfs( grafo , w , visitados , camino ): return True
+    visitados.remove(v)
+    camino.pop()
+    return False
 
-#10)Contamos con un conjunto de “n” actividades entre las que se puede optar por realizar. 
-#Cada actividad x tiene una fecha de inicio Ix, una fecha de finalización fx y un valor vx que obtenemos por realizarla. 
-#Queremos seleccionar el subconjunto de actividades compatibles entre sí que maximice la ganancia a obtener (suma de los valores del subconjunto). 
-#Proponer un algoritmo por branch and bound que resuelva el problema.
+def camino_hamiltoniano ( grafo ):
+    camino = []
+    visitados = set()
+    for v in grafo:
+        if camino_hamiltoniano( grafo , v , visitados , camino ): return camino
+    return None
 
 def main():
     #lista = [(1,2), (5,8), (2,13), (5,10), (7,2), (9,15), (15,30), (2,9)]
@@ -190,7 +219,9 @@ def main():
 
     #         ]
     # submarinos_del_orto2(matriz)
-    pass
+    W=15
+    familias = [5,2,1,6,4,3,15]
+    print(sum(bodegon_backtracking(W,familias,indice=0, asignacion_actual=[], mejor_asignacion=[])))
     
 if __name__ == '__main__':
     main()

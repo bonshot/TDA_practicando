@@ -44,12 +44,54 @@ def carlos_de_mierda(grafo, casa, escuela):
 		flujo += red_residual.peso_arista(v,casa)
 	return flujo >=5
 	
-#Se cuenta con una grafo G=(V,E) con capacidad 1 en cada uno de sus ejes. Existen 2 nodos que tomaremos como “s” fuente y “t” sumidero. 
-#Podemos determinar el flujo máximo F entre s-t. Se pide proponer un algoritmo eficiente que dado un valor “k”, 
-#determine la cantidad mínima de ejes y cuáles de ellos eliminar para que el nuevo flujo máximo sea F-k. Determinar su complejidad y detallar mediante pseudocódigo y una explicación cómo funciona.
-#5. Dado un flujo máximo de un grafo, implementar un algoritmo que, si se le aumenta la capacidad a una artista, permita
-#   obtener el nuevo flujo máximo en tiempo lineal en vértices y aristas. Indicar y justificar la complejidad del algoritmo
-#   implementado.
+# Para ayudar a personas con problemas visuales (por ejemplo, daltonismo) el gobierno de Agrabah
+# decidió que en una misma parada de colectivo nunca pararán dos colectivos que usen el mismo
+# color. El problema es que ya saben que eso está sucediendo hoy en día, así que van a repintar
+# todas las líneas de colectivos. Por problemas presupuestarios, sólo pueden pintar los colectivos
+# de k colores diferentes (por ejemplo, k = 4, pero podría se otro valor). Como no quieren parecer
+# un grupo de improvisados que malgasta los fondos públicos, quieren hacer un análisis para saber
+# si es posible cumplir con lo pedido (pintar cada línea con alguno de los k colores, de tal forma
+# que no hayan dos de mismo color coincidiendo en la misma parada).
+# Considerando que se tiene la información de todas las paradas de colectivo y qué líneas paran allí,
+# modelar el problema utilizando grafos e implementar un algoritmo que determine si es posible resolver
+# el problema.
+# Indicar la complejidad del algoritmo implementado. 
+
+
+
+# Se está formando una nueva comisión de actividades culturales de un pueblo. Cada habitante es miembro de 0 o más
+# clubes, y de exactamente 1 partido político. Cada grupo de interés debe nombrar a un representante ante la nueva
+# comisión de actividades culturales, con las siguientes restricciones: cada partido político no puede tener más de N/2
+# simpatizantes en la comisión, cada persona puede representar a solo un club, cada club debe estar representado por
+# un miembro. Implementar un algoritmo que dada la información de los habitantes (a qué clubes son miembros, a
+# qué partido pertenecen), nos dé una lista de representantes válidos. Indicar y justificar la complejidad del algoritmo
+# implementado.
+
+def partidos_corruptos(dic_clubes, dic_partidos, cant_personas):
+	grafo = Grafo
+	grafo.agregar_vertice("S")
+	grafo.agregar_vertice("F")
+	for key in dic_partidos.keys():
+		grafo.agregar_vertice(key)
+		grafo.unir("F",key,cant_personas//2)
+		for persona in dic_partidos[key]:
+			if not persona in grafo.vertices():
+				grafo.agregar_vertice(persona)
+			grafo.unir(key, persona, 1)
+	for key in dic_clubes.keys():
+		grafo.agregar_vertice(key)
+		grafo.unir(key, "S", 1)
+		for persona in dic_clubes[key]:
+			if not persona in grafo.vertices():
+				grafo.agregar_vertice(persona)
+			grafo.unir(persona, key, 1)
+	flujo = grafo.ford_fulkerson("S", "F")
+	participantes = []
+	for arista in flujo.keys():
+		if arista.origen in dic_partidos.values():
+			participantes.append(arista.origen)
+	return participantes
+
 
 def main():
     pass
