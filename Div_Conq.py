@@ -128,7 +128,6 @@ def  _poronga_de_busqueda_con_div_y_conq_porque_soy_un_culo_y_no_se_hacer_busque
         return _poronga_de_busqueda_con_div_y_conq_porque_soy_un_culo_y_no_se_hacer_busquedas(lista, medio+1, fin)
     else:
         return _poronga_de_busqueda_con_div_y_conq_porque_soy_un_culo_y_no_se_hacer_busquedas(lista, inicio, medio-1)
-
 #*************************************************************************************************
 #Dado un vector A de “n” números enteros (tanto positivos como negativos) 
 #queremos obtener el subvector cuya suma de elementos sea mayor a la suma de cualquier otro subvector en A.  
@@ -190,7 +189,7 @@ def _raiz_entera_todita(arr, inicio, fin, n):
 
 def raiz_entera_todita(n):
     arr = [i for i in range(0, n)]
-    return _raiz_entera_todita(arr, 0, n - 1, n)
+    return _raiz_entera_todita(arr, 0, n, n)
 
 def raiz_entera(n):
     inicio, final = 0, n
@@ -202,12 +201,25 @@ def raiz_entera(n):
         if medio_cuadrado < n:
             inicio = medio + 1
             resultado = medio
-            
         else:
             final = medio -1
     
     return resultado 
         
+
+def quicksort(arr):
+    if len(arr) <= 1:
+        return arr
+
+    pivot = arr[len(arr) // 2]
+    left = [x for x in arr if x < pivot]
+    middle = [x for x in arr if x == pivot]
+    right = [x for x in arr if x > pivot]
+
+    return quicksort(left) + middle + quicksort(right)
+
+
+
 
 def main():
     #boyas = [(0,0), (3,25), (0,1)]
@@ -225,8 +237,13 @@ def main():
     # lista = [-2, -5, 6, -2, -3, 1, 5, -6]
     # print(subarreglo_suma_maxima_te_odio_div_y_conq(lista))
     
-    print(raiz_entera(10))
+    # print(raiz_entera_todita(35))
 
-    
+    # print(poronga_de_busqueda_con_div_y_conq_porque_soy_un_culo_y_no_se_hacer_busquedas([1, 2, 3, 4, 5, 6, 7,8, 9, 10, 11, 12, 13, 14, 20, 22]))
+
+    # Ejemplo de uso
+    arr = [3, 6, 8, 10, 1, 2, 1]
+    sorted_arr = quicksort(arr)
+    print("Arreglo ordenado:", sorted_arr)
 if __name__ == '__main__':
     main()

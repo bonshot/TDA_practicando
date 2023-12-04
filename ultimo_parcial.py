@@ -16,7 +16,9 @@ def libros_de_mierda(L, libros):
         else:
             cajas += 1
             suma_parcial = libros[i]
+    
     return cajas
+
 #La complejidad del algoritmo es O(n + n * log(n)) ya que primero se ordena y después recorremos todo el arreglo haciendo verificaciones O(1).
 # El algoritmo propuesto es greedy porque agarra el primer libro que mejor entre en la caja actual hasta poder guardar todos los libros y 
 # obtener la cantidad minima de cajas totales.
@@ -113,11 +115,11 @@ def dominating_set_bt(grafo, actual, k, solucion_parcial):
     solucion_parcial.add(v)
     # Se podria agregar una poda donde si no cubrimos un nuevo vértice por agregar al vértice, 
     # entonces obviamos esa alternativa
-    solucion = dominating_set_bf(grafo, actual+1, k, solucion_parcial)
+    solucion = dominating_set_bt(grafo, actual+1, k, solucion_parcial)
     if solucion is not None:
         return solucion
     solucion_parcial.remove(v)
-    return dominating_set_bf(grafo, actual+1, k, solucion_parcial)
+    return dominating_set_bt(grafo, actual+1, k, solucion_parcial)
 
 def dominating_set(grafo, k):
     return dominating_set_bt(grafo, 0, k, set())
@@ -133,5 +135,6 @@ def cubre_todos(grafo, domset):
 
 def main():
     # print(libros_de_mierda(7, [3,3,2,2,2,2]))
-    print(juan_del_vago_ahora_ladron([10,12,5,8,9,2,4]))
+    # print(juan_del_vago_ahora_ladron([10,12,5,8,9,2,4]))
+    pass
 main()

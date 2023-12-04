@@ -155,7 +155,7 @@ def cuadrados_minimizados2(n,s):
 # hayaa al menos una cancion que le guste a cada persona en B. Por eso, dado un subconjunto 
 # de canciones, simplemente verificamos si para cada persona en B hay almenos una cancion
 # en el subconjunto que le gusta. Esta verificacion nos confirmaria que el problema es NP
-def verificador(conjunto_B, conjunto_A, solucion):
+def verificador(conjunto_B, conjunto_A, solucion, k):
     if len(solucion) > k:
         return False
     for persona in conjunto_B:
@@ -265,4 +265,35 @@ def verificador_grafo_completo(conexiones, granjeros, n):
 #Reduccion: Si existe un vertex cover de tamaño N en G, entonces existe un conjunto de esquinas elegidas
 # de tamaño N para que se puedan cubrir todas las calles. Por lo que el problema de los guardianes 
 # es NP-Completo. 
+
+#**************************************************************************
+# El problema de elección de caminos (Path Selection) pregunta: dado un grafo dirigido G y un set de pedidos P1, P2, ..., Pc
+# de caminos dentro de dicho grafo y un número k, ¿es posible seleccionar al menos k de esos caminos tales que ningún
+# par de ellos compartan ningún nodo?
+# Demostrar que Path Selection es un problema NP-Completo. Ayuda: este problema tiene mucha semejanza con
+# Independent Set. Recomandamos reducir dicho problema a Path Selection.
+
+#Para demostrar que Path selection es NP-Completo, primero tenemos que demostrar que es NP y luego reducir un problema
+#Np-completo al problema de Path Selection
+
+# Verificamos que sea NP
+# Para esto nos fijamos en los caminos pedidos, ponemos un un set, múltiples sets de vértices por los que pasan estos pedidos
+# , luego nos fijamos si el nodo fue visitado, si estaba visitado entonces no es una solución válida, pero si no podemos continuar
+# , al terminar la ejecución si ningún nodo estaba en "visitados" para un nuevo pedido, entonces es válida. Esto es en tiempo lineal
+# ya que debemos únicamente pasar por todos los pedidos verificando todos sus componentes con comparaciones lineales contra el set
+# de visitados. O(L) donde L es la suma de los vértices ocupados por los pedidos, en el peor de los casos los pedidos abarcan todos los 
+# vértices del grafo ---> O(V)
+
+# Reducimos Independent Set a Path Selection para demostrar por relación que Path Selection es NP-Completo
+# Ahora, asumamos que tenemos un grafo no dirigido G y un K para una instancia de problema problema de IS.
+# Queremos construir un grafo dirigido G y un conjunto de caminos P1, P2...Pc
+# La construccion sera la siguiente:
+# Creo un grafo G' y un K' que es igual K de la instancia de IS, donde en mi G' quiero unir aquellos vértices de G
+# que comparten un mismo adyacente, los pedidos serán los caminos que unen a los vértices de G' que comparten un adyacente
+# entonces si compartirmos un adyacente en G, entonces tenemos un camino en G' que une a los vértices que comparten el adyacente.
+# De esta forma Path Selection se ve obligado a elegir un camino de cada par de vértices que comparten un adyacente, y como K' es igual
+# a K, entonces debe elegir K caminos de los pedidos (estos son los caminos posibles que unen a los vértices mencionados).
+# Si tengo 2 vértices unidos por la razón mencionada, entonces hay 2 caminos posibles entre esos vértices (El que va por la adyacencia
+# y el directo), por lo que para poder encontrar un PS de tamaño K' se deberá tomar uno solo de esos
+# Si existe IS de tamaño K en G, entonces existe PS de tamaño K' en G'. Por lo que Path Selection es NP-Completo (IS <p PS)
 

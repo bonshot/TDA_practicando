@@ -1,3 +1,72 @@
+#DIVISION
+array = [-2, -5, 6, -2, -3, 1, 5, -6]
+
+def max_sum_until(array, min, max):
+    """
+    Looking for the best i for a given j
+    """
+    if min == max:
+        return min
+    
+    middle = (min + max) // 2
+
+    left = max_sum_until(array, min, middle)
+    left_sum = sum(array[left:])
+
+    right = max_sum_until(array, middle + 1, max)
+    right_sum = sum(array[right:])
+
+    return left if left_sum > right_sum else right
+
+def max_sum(array, min, max):
+    """
+    Looking for the best j
+    """
+    if min == max:
+        return min
+    
+    middle = (min + max) // 2
+
+    left = max_sum(array, min, middle)
+    left_i = max_sum_until(array[:left], 0, left)
+    left_sum = sum(array[left_i:left])
+
+    right = max_sum(array, middle + 1, max)
+    right_i = max_sum_until(array[:right], 0, right)
+    right_sum = sum(array[right_i:right])
+
+    return left if left_sum > right_sum else right
+
+def max_sum_array(array):
+    j = max_sum(array, 0, len(array))
+    i = max_sum_until(array, 0, j)
+    return array[i:j]
+
+# // Implementar, por división y conquista, una función que dado un arreglo sin elementos repetidos y casi
+# // ordenado (todos los elementos se encuentran ordenados, salvo uno), obtenga el elemento fuera de lugar.
+
+# en python
+def elemento_desordenado(arr):
+    if len(arr) == 1:
+        return None
+    
+    middle = len(arr) // 2
+
+    first_half = arr[:middle]
+    second_half = arr[middle:]
+
+    if first_half[-1] > second_half[0]:
+        return second_half[0]
+
+    op1 = elemento_desordenado(first_half)
+    op2 = elemento_desordenado(second_half)
+
+    return op1 if op1 is not None else op2
+    
+
+arr = [1, 2, 4, 5, 6, 3, 7, 8, 9]
+
+
 #GREEDY
 # Tengo un aula donde quiero dar charlas, que cada una tiene un horario
 # de inicio y un horario de fin. Quiero dar la mayor cantidad de charlas.
@@ -186,7 +255,7 @@ def bodegon(familias, W):
             else:
                 res[i][j] = max(res[i-1][j], res[i-1][j-familias[i-1]] + familias[i-1])
     return res[n][W]
-print(bodegon([1,5,8,12,10,3,4], 15))
+# print(bodegon([1,5,8,12,10,3,4], 15))
 
 
 # Manejamos un negocio que atiende clientes en Londres y en California.
@@ -234,6 +303,57 @@ def minimizar_costos(L,C,M):
 # M = 5
 
 # resultado = minimizar_costos(L, C, M)
+# Contamos con un dep´osito de L litros lleno de aceite de oliva. Queremos
+# fraccionarlo y venderlo en el mercado. De acuerdo a las especificaciones
+# vigentes solo se puede fraccionar en valores enteros de litros. Una tabla
+# regulatoria determina el valor de venta para cada i litros como Vi
+# . Podemos fraccionar como queramos, pero deseamos maximizar la ganancia.
+def maximizar_ganancia(L, valores):
+    n = len(valores)
+
+    # Inicializar la tabla de programación dinámica
+    dp = [0] * (L + 1)
+
+    # Calcular la ganancia máxima para cada cantidad de litros
+    for litros in range(1, L + 1):
+        for i in range(n):
+            if litros >= (i + 1):
+                dp[litros] = max(dp[litros], valores[i] + dp[litros - (i + 1)])
+
+    # La ganancia máxima estará en la última entrada de la tabla
+    return dp[L]
+print(maximizar_ganancia(5, [2,5,9,10]))
+
+
+# Sea G un grafo dirigido “camino” (las aristas son de la forma (vi, vi+1)). Cada vertice tiene un valor (positivo).
+# Implementar un algoritmo que, utilizando programación dinámica, obtenga el Set Independiente de suma máxima
+# dentro de un grafo de dichas características. Indicar y justificar la complejidad del algoritmo implementado.
+def max_independent_set(graph):
+    n = len(graph)
+    if n == 0:
+        return 0
+
+    # Inicializar la tabla de memoización
+    dp = [0] * n
+    dp[0] = graph[0]
+
+    # Llenar la tabla utilizando la relación de recurrencia
+    for i in range(1, n):
+        dp[i] = max(dp[i-1], (dp[i-2] if i-2 >= 0 else 0) + graph[i])
+
+    # Reconstruir la solución
+    independent_set = []
+    i = n - 1
+    while i >= 0:
+        if i == 0 or dp[i-1] <= dp[i-2] + graph[i]:
+            independent_set.append(i)
+            i -= 2
+        else:
+            i -= 1
+
+    # Devolver la suma máxima y el conjunto independiente
+    return dp[n-1], independent_set
+
 
 #FUERZA BRUTA Y BACKTRACKING
 # Un bodegón tiene una única mesa larga con W lugares. Hay una persona en la puerta que anota los grupos que quieren
@@ -268,38 +388,33 @@ def bodegon_backtracking(familias, W, indice, asignacion_actual, mejor_asignacio
 # modelar el problema utilizando grafos e implementar un algoritmo que determine si es posible resolver
 # el problema.
 # Indicar la complejidad del algoritmo implementado. 
-
-def es_compatible(grafo, colores, v):
+def hay_conflictos(grafo, coloreado, v):
     for w in grafo.adyacentes(v):
-        if w in colores and colores[w] == colores[v]:
-            return False
-    return True
-
-def _colore_rec(grafo, k, colores,v):
-    for color in range(k):
-        colores[v] = color
-        if not es_compatible(grafo, colores, v):
-            continue
-        correcto = True
-        for w in grafo.adyacentes(v):
-            if w in colores:
-                continue
-            if not _colore_rec(grafo, l, colores, w):
-                correcto = False
-                break
-        if correcto:
+        if coloreado[w] == coloreado[v]:
             return True
-    del colores[v]
     return False
 
-def coloreo(grafo, k):
-    colores = {}
-    if _coloreo_rec(grafo, k, colores, "Argentina"):
-        print(colores)
+
+def k_coloreo(grafo, k, vertices, coloreados):
+    if len(vertices) == 0:
         return True
-    else:
-        print(colores)
-        return False
+    
+    v = vertices.pop(0)
+
+    for color in range(k):
+        coloreados[v] = color
+        if not hay_conflictos(grafo, coloreados, v):
+            if k_coloreo(grafo, k, vertices, coloreados):
+                return True
+        coloreados[v] = None
+
+    vertices.insert(0, v)
+    return False
+    
+def colectivos(grafo, k):
+    vertices = grafo.obtener_vertices()
+    coloreados = {v: None for v in vertices}
+    return k_coloreo(grafo, k, vertices, coloreados)
 
 # Implementar un algoritmo que, por backtracking, obtenga todos los posibles ordenamientos topológicos de un grafo
 # dirigido y acíclico.
