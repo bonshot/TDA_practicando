@@ -99,30 +99,34 @@
 # Definimos el problema del Hitting Set como: dado un conjunto finito S de “n” elementos, una colección C de subconjuntos de S, un número positivo K ≤ n, 
 # ¿existe un subconjunto S’ ⊆ S tal que S’ contiene al menos un elemento de cada subconjunto de C y |S’| ≤ K? Demostrar que este problema es NP-Completo. Sugerencia: utilizar Vertex Cover.
 
+#Para demostrar que el problema del Hitting Set es NP, primero debemos demostrar que un certificado
+# de solucion se puede verificar en tiempo polinomial.
+#Dado un conjunto finito S, una coleccion C de subconjuntos de S, y un numero positivo K <= n,
+#un certificador seria un subconjunto S' de S tal que |S'| <= K y S' contiene al menos un
+#elemento de cada subconjunto en C.
+
+#La verificaciond e la solucion se puede hacer en tiempo polinomial, ya que simplemente
+#se necesita verficar si S' tiene un tamaño menor o igual a K  y si contiene al menos un elemento
+#de cada subconjunto en C. Ambos pasos pueden hacerse en tiempo O(n) donde n es el tamaño de S.
+
+#Reduccion:
+#Construimos la instancia de HS:
+#Conjunto S: Asignamos el conjunto de vertices V de G como nuestro conjunto S en hitting set
+#Colleccion C: para cada arista(u,v) en E, creamos un conjunto en C que contiene los vertices
+#u y v. Asi, C es una coleccion de conjuntos, cada uno corresponde a una arista en E
+#Numero K: Tomamos K como el tamaño deseado del vertex cover
+
+#Si existe un vertex Cover de tamaño K en G, podemos seleccionar los K elementos correspondientes
+# en S para formar un conjunto S'. Este conjunto S' tendra al menos un elemento de cada conjunto
+#en C
+#Si existe un conjunto S' en hitting Set, que contiene almenos un elemento de cada conjunto en C,
+#entonces estos elementos en S' forman un vertex cover de tamaño K en G
+
+#La reduccion establece una correspondencia entre las soluciones de VC y las soluciones de hitting set.
+#Existe un vertex cover de almenos K vertices si y solo si existe un conjunto S' de almenos K elementos
+#pertenecientes a la colleccion C.
+
 #*************************************************************
-
-# El problema del Ciclo Hamiltoniano dirigido corresponde a una variante del problema de Ciclo Hamiltoniano con la diferencia que la instancia corresponde a un grafo dirigido. 
-# Demostrar que este problema pertenece a NP-C. Sugerencia: Puede utilizar Ciclo Hamiltoniano.
-
-#*************************************************************
-
-# Definimos el problema Subgrafo denso de la siguiente manera: Dado un grafo G=(V,E) y dos parámetros a y b. Existe en G un subconjunto de “a” vértices con al menos “b” ejes entre ellos. 
-# Demostrar que este problema es NP-Completo. Sugerencia: Utilizar el problema del Clique.
-
-#*************************************************************
-
-# Definimos al problema de Set Packing como: Dado “n” conjuntos S1,S2,...,Sn y un parámetro k. 
-# Queremos saber si existe una colección de tamaño k de los subconjuntos tales que ningún elemento contenido en ellos está repetido en estos “k” conjuntos? 
-# Demostrar que este problema es NP-Completo. Sugerencia: Utilizar Conjunto independiente.
-
-#*************************************************************
-
-# Dado un grafo G=(V,E) no dirigido se denomina como Feedback set a un subconjunto X⊆V de vértices tal que el grafo resultante de eliminar los vértices de X 
-# y los ejes adyacentes a estos no tiene ciclos. 
-# El problema de decisión de Undirected Feedback Set quiere responder si dado un grafo G no dirigido existe un feedback set de tamaño k o menor. 
-# Demostrar que este problema es NP-Completo. Sugerencia: Utilizar Vertex Cover.
-
-#*************************************************************MAÑANA
 
 # Un país está modificando su red radiofónica. 
 # Existen muchas estaciones de radios cada una con su propia frecuencia de transmisión. 
@@ -130,21 +134,34 @@
 # Un estudio informa cuántas radios hay, y para cada radio con cuáles hay riesgo de interferencia. Quisieran determinar si es posible realizar la reasignación. 
 # Demuestre que el problema planteado es NP-COMPLETO. HINT!: Tal vez le resulte útil coloreo de grafos.
 
-#*************************************************************
+#Demostracion que pertenece a NP:
+#Dado un conjunto de frecuencias de radio asignadas a las estaciones actuales,
+#Podemos verificar en tiempo polinomial si la asignacion propuesta
+#satisface todas las restricciones de interferencia. Solo necesitamos verificar que ninguna
+#estacion interfiera con otra asignada a la misma frecuencia. La verificacion de esta condicion
+#se puede realizar en tiempo polinomial, lo que demuestra que el problema esta en NP.
+#La complejidad seria O(n), donde n es el tamaño del conjunto de estaciones de radio
 
+#Reduccion de coloreo a reasignacion de frecuencias de radio:
+#Dado un grafo = (V,E), donde V es el conjunto de vertices y E es el conjunto de aristas, 
+#queremos colorear los vertices de manera que ningun par de vertices adyacentes tenga el mismo color.
+#Transformaremos este problema de coloreo de grafos en un problema de reasignacion de frecuencias
+#de radio
 
-# Para un evento a realizar se requiere conformar una selección musical entre el conjunto A de “n” canciones. 
-# Podemos enumerar a los elementos de A como a1,a2,...,an. Por otra parte, contamos con un conjunto “B” de “m” personas. 
-# Cada una de ellas con un subsets de esas canciones que le gustan. Deseamos saber si podemos seleccionar un subconjunto de no más de “k” canciones, 
-# de tal forma que existe al menos 1 canción que le guste a cada uno. Se pide: Demostrar que el problema es NP-Completo. Sugerencia: Se puede utilizar Vertex Cover.
+#Estaciones de radio:Asociaremos cada vertice v en G con una estacion de radio.
+#Frecuencias de transmision: Asociaremos cada color en el problema de coloreo de grafos con una 
+#frecuencia de transmision
+#Interferencia:Habra una interferencia entre dos estaciones si y solo si los vertices correspondientes
+#en el grafo son adyacentes
 
-#*************************************************************
+#Si dos vertices estan concetados por una arista en el grafo original, las estaciones de radios
+#intereferiran entre si
+#Si se puede asignar a dos estaciones de radio que interfieren entre si con frecuencias diferentes,
+#podemos colorear dos vertices adyacentes con colores distintos
 
-# Nos piden que organicemos una jornada de apoyo de estudio para exámenes. 
-# Tenemos que poder dar apoyo a “n” materias y hemos recibido currículos de “m” postulantes para ser potenciales ayudantes. 
-# Cada ayudante puede ayudar en un determinado subconjunto de materias. Para cada una de las materias hay un subconjunto de postulantes que pueden dar apoyo en ella. 
-# La pregunta es: dado un número k < m, ¿es posible seleccionar a lo sumo “k” ayudantes de modo tal que siempre haya un ayudante que pueda dar consultas en alguna de las n materias? 
-# Este problema se llama Contratación Eficiente. Probar que “Contratación Eficiente” es NP-completo. Sugerencia: se puede tratar de usar Cubrimiento de Vértices.
+#Por lo tanto, existe un coloreo de grafos si y solo si existe una solucion para el problema de radios
+#de esta manera se puede comprobar que el problema es NP-completo
+
 #*************************************************************
 
 # Un departamento dentro de una universidad adquirió “n” proyectores para dar clases durante el cuatrimestre. 
@@ -152,6 +169,27 @@
 # Un subconjunto de docentes respondió afirmativamente. Sabiendo que cada materia tiene clases 1 o más veces por semana en un horario establecido. 
 # Y sabiendo que los horarios de varias de esas materias se superponen. Nos solicitan determinar si la cantidad comprada alcanza o si se tiene que dejar a docentes sin acceso a esas cuentas. 
 # Demostrar que lo solicitado es NP-COMPLETO. Sugerencia: Tal vez le resulte útil “k” coloreo de grafos.
+
+#Para demostrar que es Np, basta con crear un certificador en tiempo polinomial, ya que podemos
+#verificar que para cada par de docentes que se superpongan sus clases, que se les pueda asignar distintos proyector
+#de esta manera podremos comprobar que se puede asignar n proyectores de tal que no se superpongan entre clases
+#Esta verificacion tiene complejidad O(n) donde n es la cantidad de profesores
+
+#Ahora para comprobar que el problema es Np-completo, creamos una instancia del problema 
+#Cada vertice del grafo G se asociara como un docente
+#Cada color en K-coloreo se asociara con un proyector
+#Cada conexion entre dos vertices en el grafo se asociara a docentes que tienen clases que se 
+#superponen
+
+#La idea es que si podemos asignar proyector a los docentes de manera que no haya superposicion de horarios,
+#entonces podemos K-colorear el grafo original sin asignar el mismo color a vertices adyacentes. 
+#del mismo modo, si podemo K colorear el grafo, entonces podemos asignar proyector a los docentes de manera
+#que noh aya superposicion
+
+#esta reduccion se peude hacer en tiempo polinomico, ya que estamos creando una instancia de nuyestro problema
+#para cada instancia del problema de k-coloreo y viceversa.
+
+#Por lo tanto, existe k-coloreo de un grafo si y solo existe una solucion al problema de n-proyectores
 
 #*************************************************************
 
@@ -174,7 +212,23 @@
 # que incluye los n directivos y un listado donde se ven aquellos pares de directivos que están peleados entre sí, determinar si es posible sentarse en la mesa. 
 # Demostrar que el problema es NP-C. Sugerencia: Utilizar ciclo Hamiltoniano.
 
-#**************************************************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#**************************************************************OTRO DIA
 
 # Para el desarrollo de un circuito digital se requiere construir
 # “n” caminos por donde pasará corriente eléctrica. Por diseño cada
@@ -197,3 +251,29 @@
 # El problema de Conjuntos Fuertemente Independientes consiste en decidir si G tiene un conjunto fuertemente independiente de tamaño al menos k. 
 # Probar que el problema de Conjuntos Fuertemente Independientes es NP completo. 
 # Utilizar para ello que Conjuntos Independientes es NP completo.
+
+
+#*************************************************************
+
+# Dado un grafo G=(V,E) no dirigido se denomina como Feedback set a un subconjunto X⊆V de vértices tal que el grafo resultante de eliminar los vértices de X 
+# y los ejes adyacentes a estos no tiene ciclos. 
+# El problema de decisión de Undirected Feedback Set quiere responder si dado un grafo G no dirigido existe un feedback set de tamaño k o menor. 
+# Demostrar que este problema es NP-Completo. Sugerencia: Utilizar Vertex Cover.
+
+#*************************************************************
+
+# Definimos el problema Subgrafo denso de la siguiente manera: Dado un grafo G=(V,E) y dos parámetros a y b. Existe en G un subconjunto de “a” vértices con al menos “b” ejes entre ellos. 
+# Demostrar que este problema es NP-Completo. Sugerencia: Utilizar el problema del Clique.
+
+
+#*************************************************************
+
+# El problema del Ciclo Hamiltoniano dirigido corresponde a una variante del problema de Ciclo Hamiltoniano con la diferencia que la instancia corresponde a un grafo dirigido. 
+# Demostrar que este problema pertenece a NP-C. Sugerencia: Puede utilizar Ciclo Hamiltoniano.
+
+#*************************************************************
+
+# Definimos al problema de Set Packing como: Dado “n” conjuntos S1,S2,...,Sn y un parámetro k. 
+# Queremos saber si existe una colección de tamaño k de los subconjuntos tales que ningún elemento contenido en ellos está repetido en estos “k” conjuntos? 
+# Demostrar que este problema es NP-Completo. Sugerencia: Utilizar Conjunto independiente.
+
