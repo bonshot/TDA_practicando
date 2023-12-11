@@ -198,35 +198,118 @@
 # Por cada situación han anotado con cual no es compatible. Desean poder seleccionar un conjunto de N premisas compatibles para presentar a los productores como idea inicial. 
 # Se pide: Demostrar que el problema es NP-Completo. Sugerencia:  Tal vez le resulte útil clique
 
+#Para demostrar que el problema es NP, necesitamos mostrar que dada una solucion candidata,
+#podemos verificar en tiempo polinomico si es realmente una solucion correcta. En el caso del problema de premisas
+#compatibles, esto implica verificar si un conjunto S de premisas de tamaño N no tiene incompatibles entre si
+#Basicamente se verifica que el conjunto S tiene el tamaño requerido y luego verifico que ninguna premisa en S es incompatible
+#con otra premisa en S. Esto implica revisar la lista de incompatibilidades I para cada par de premisas en S
+#y aseugrarse de que no haya ninguna incompatibilidad
+#La complejidad es O(N) donde N es es el largo de la lista I
+
+#Ahora para reducir K-clique a N-premisas, construimos el problema
+#Dado un grafo no dirigido G y un numero K, formamos:
+#Para cada nodo v en G, creamos una premisa p en P
+#Para cada arista(u,v) en G, añadimos la incompatibilidad (Pu, Pv) a I
+
+#Si existe una clique de tamaño K en G entonces podemos seleccionar un conjunto S de premisas 
+#y no habra incompatiblidades, ya que los nodos forman una clique. Ademas, |S| = k por lo que 
+#habria solucion
+#Si no existe un clique de tamaño K en g, entonces, cualquier conjunto de N premisas que seleccionemos
+#tendra al menos un par de premisas incompatibles debido a la falta de una clique de tamaño K
+
+#Por lo tanto, existe un K-clique en G si y solo si existe un N-premisas en el problema y de esta manera
+#comprobamos que es Np-Completo
+
 #*************************************************************
 
-# Una compañía multinacional desea contratar cobertura satelital para sus “n” sedes repartidas por el mundo. 
-# Han averiguado entre varias empresas que proveen el servicio pero ninguna de ellas tiene cobertura total. 
-# Les gustaría poder contratar a “k” o menos empresas. Pero tienen una condición adicional: al menos una de sus sedes debe tener cobertura de todas las empresas que la ofrecen. 
-# Con eso pueden iniciar una certificación de calidad que necesitan. Se pide: Demostrar que el problema es NP-Completo. Sugerencia: Utilizar Set Cover
+# Dado un grafo G=(V,E) no dirigido se denomina como Feedback set a un subconjunto X⊆V de vértices tal que el grafo resultante de eliminar los vértices de X 
+# y los ejes adyacentes a estos no tiene ciclos. 
+# El problema de decisión de Undirected Feedback Set quiere responder si dado un grafo G no dirigido existe un feedback set de tamaño k o menor. 
+# Demostrar que este problema es NP-Completo. Sugerencia: Utilizar Vertex Cover.
+
+# Dado una instancia del problema, que consiste en un grafo no dirigido G y un numero K, junto con un conjunto
+# de vertices X C= V, podemos verificar en tiempo polinomico si X es un freedback Set de tamaño K o menor
+# de la siguiente manera
+
+# Verifico el tamaño: Verficar si |x| <= k. Eso se puede hacer en O(1)
+# Eliminar vertices y aristas: Eliminar todos los vertices en X y las aristas adyacentes a ellos para 
+# obtener el grafo G'
+# Verificar la ausencia de ciclos: Verificar si G' no tiene ciclos, con DFS que tiene complejidad (V+E)
+# De esta manera comprobamos que el problema es NP
+
+# Ahora demostramos que es Np-completo
+# Dado un grafo no dirigido G= (V,E) y un numero k, ¿existe un conjunto S incluido a V tal que |S| <= K
+# y cada arista en E incide en almenos un vertice en S ?
+
+# Construimos una instancia equivalente del problema Feedback Set
+# Sea G=(V,E), una instancia del problema de VC
+# Construimos un nuevo grafo G' = (V', E') de la siguiente manera
+#     Para cada vertice v en V, creamos dos vertices v' y v'' en V'
+#     Para cada arista (u,v) en E, agregamos lar aristas (u', u'') y (v', v'') en E'.
+
+# Si existe un vertex Cover S en G: Tomamos S' = {v' | v E S}. El conjunto S' es un feedback Set
+# en G' porque al eliminar los vertices en S' y los ejes adyacentes a ellos, eliminamos todas las 
+# aristas originales de G, evitando asi la formacion de ciclos.
+# Si existe un freedback Set S' en G': el conjunto S es un vertex cover en G porque cada arista en g
+# tiene almenos un extremo en S, ya que al duplicar los vertices, garantizamos que al meons uno de los duplicados
+# esta en S'
+
+# Por lo tanto, exist eun VC si y solo si existe un feedback Set de tamaño k' y de esta manera 
+# demostramos que es Np-completo
 
 #*************************************************************
 
-# El directorio de una empresa realizará una cena de fin de año. En total son “n” directivos que se deben sentar alrededor de una mesa circular. 
-# Lamentablemente existen conflictos entre algunos de ellos que impiden que se sienten uno al lado del otro. Dado una instancia del problema, 
-# que incluye los n directivos y un listado donde se ven aquellos pares de directivos que están peleados entre sí, determinar si es posible sentarse en la mesa. 
-# Demostrar que el problema es NP-C. Sugerencia: Utilizar ciclo Hamiltoniano.
+# El problema del Ciclo Hamiltoniano dirigido corresponde a una variante del problema de Ciclo Hamiltoniano con la diferencia que la instancia corresponde a un grafo dirigido. 
+# Demostrar que este problema pertenece a NP-C. Sugerencia: Puede utilizar Ciclo Hamiltoniano.
 
+# Para mostrar que nuestro problema esta en NP, simplemente verificamos que el ciclo Hamiltoniano
+# contenga todos los vertices del grafo y que contenga exactamente una arista dirigida entre cada par consecutivo
+# de vertices. Esto se puede hacer de forma lineal.
 
+# Supongamos que tenemos una instancia del problema del ciclo hamiltoniano, que consiste en un grafo
+# no dirigido y ahora queremos construir una instancia del problema del ciclo hamiltoniano dirigido
+# Para cada arista no dirigida (u,v), agregamos dos aristas dirigidas en direcciones opuestas en el nuevo grafo
+# dirigido. Esto significa que E' incluira tanto (u,v) como (v,u) para cada arista (u,v) en E
+# Esto refleja la nocion de visitar tanto u como v en ambas direcciones, como se haria en un ciclo hamiltoniano
+# no dirigido
+# Garantizamos que cada vertice en V este presente en G' sin cambio
+# Si encontramos un ciclo hamiltoninano dirigido en G', podemos reconstruir un ciclo no dirigido en G
+# considerando solo las aristas no dirigidas correspondientes.
+# De esta manera Podemos afirmar que el problema del ciclo hamiltoniando dirigido,
+# es al menos tan dificil como el problema no dirigido
 
+#*************************************************************
 
+# Definimos al problema de Set Packing como: Dado “n” conjuntos S1,S2,...,Sn y un parámetro k. 
+# Queremos saber si existe una colección de tamaño k de los subconjuntos tales que ningún elemento contenido en ellos está repetido en estos “k” conjuntos? 
+# Demostrar que este problema es NP-Completo. Sugerencia: Utilizar Conjunto independiente.
 
+# Para demostrar que el problema pertenece a NP, dado una coleccion de k conjuntos, podemos
+# seguir estos pasos
+# 1)verificar si cada conjunto en la coleccion es realmente un subconjunto del conjunto original
+# de elementos.Eso se puede hacer en tiempo lineal
+# 2) verificar si hay algun elemento que esta presente en mas de un conjunto.
+# El tiempo de ejecucion total seria de orden O(K*N), donde K es el numero de conjuntos y n es el tamaño
+# maximo de un conjunto
 
+# De esta manera se demuestra que el problema de set packing pertenece a NP
 
+# Ahora vamos a demostrar que es Np-completo
+# Dado una instancia (G, K) donde G es un grafo no dirigido(V,E) y K es un numero entero, del problema IS,
+# construimos una instancia (S1,S2,.....,Sn, K') del problema de Set packing:
+#     Para cada vertice v en V, creamos un conjunto Sv que contiene v como unico elemento
+#     Tomamos k' como K del IS
 
+# Dado que Sv tiene un solo elemento, no hay elementos repetidos en ningun conjuntos. Ademas seleccionar
+# k' conjuntos, estamos buscando k' vertices distintos en G, lo que es equivalente a buscar un conjunto
+# independiente de tamaño al menos K
+# Si encontramos una solucion del problema de Set packing, seleccionando k' conjuntos, encontes los vertices
+# correspondientes forman un IS de tamaño al menos k. La inversa tambien es cierta: si encontramos un conjunto
+# independiente en G de tamaño al menos k, podemos seleccionar conjuntos correspondientes en la instancia Set packing
 
-
-
-
-
-
-
-
+# De esta manera, hemos demostrado que hay un IS de tamaño almenos k si 
+# y solo si hay un Set packing de al menos un tamaño
+# k' y asi mostramos que el problema tambien es NP-completo
 
 #**************************************************************OTRO DIA
 
@@ -252,28 +335,17 @@
 # Probar que el problema de Conjuntos Fuertemente Independientes es NP completo. 
 # Utilizar para ello que Conjuntos Independientes es NP completo.
 
+#*************************************************************
+
+# Una compañía multinacional desea contratar cobertura satelital para sus “n” sedes repartidas por el mundo. 
+# Han averiguado entre varias empresas que proveen el servicio pero ninguna de ellas tiene cobertura total. 
+# Les gustaría poder contratar a “k” o menos empresas. Pero tienen una condición adicional: al menos una de sus sedes debe tener cobertura de todas las empresas que la ofrecen. 
+# Con eso pueden iniciar una certificación de calidad que necesitan. Se pide: Demostrar que el problema es NP-Completo. Sugerencia: Utilizar Set Cover
 
 #*************************************************************
 
-# Dado un grafo G=(V,E) no dirigido se denomina como Feedback set a un subconjunto X⊆V de vértices tal que el grafo resultante de eliminar los vértices de X 
-# y los ejes adyacentes a estos no tiene ciclos. 
-# El problema de decisión de Undirected Feedback Set quiere responder si dado un grafo G no dirigido existe un feedback set de tamaño k o menor. 
-# Demostrar que este problema es NP-Completo. Sugerencia: Utilizar Vertex Cover.
-
-#*************************************************************
-
-# Definimos el problema Subgrafo denso de la siguiente manera: Dado un grafo G=(V,E) y dos parámetros a y b. Existe en G un subconjunto de “a” vértices con al menos “b” ejes entre ellos. 
-# Demostrar que este problema es NP-Completo. Sugerencia: Utilizar el problema del Clique.
-
-
-#*************************************************************
-
-# El problema del Ciclo Hamiltoniano dirigido corresponde a una variante del problema de Ciclo Hamiltoniano con la diferencia que la instancia corresponde a un grafo dirigido. 
-# Demostrar que este problema pertenece a NP-C. Sugerencia: Puede utilizar Ciclo Hamiltoniano.
-
-#*************************************************************
-
-# Definimos al problema de Set Packing como: Dado “n” conjuntos S1,S2,...,Sn y un parámetro k. 
-# Queremos saber si existe una colección de tamaño k de los subconjuntos tales que ningún elemento contenido en ellos está repetido en estos “k” conjuntos? 
-# Demostrar que este problema es NP-Completo. Sugerencia: Utilizar Conjunto independiente.
+# El directorio de una empresa realizará una cena de fin de año. En total son “n” directivos que se deben sentar alrededor de una mesa circular. 
+# Lamentablemente existen conflictos entre algunos de ellos que impiden que se sienten uno al lado del otro. Dado una instancia del problema, 
+# que incluye los n directivos y un listado donde se ven aquellos pares de directivos que están peleados entre sí, determinar si es posible sentarse en la mesa. 
+# Demostrar que el problema es NP-C. Sugerencia: Utilizar ciclo Hamiltoniano.
 
