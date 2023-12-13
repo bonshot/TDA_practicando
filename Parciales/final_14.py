@@ -63,18 +63,18 @@ print("Conjunto Independiente de Suma Máxima:", result)
 # para bolsas con peso máximo 5 y para una lista con los pesos: [ 4, 2, 1, 3, 5 ]. ¿El algoritmo implementado
 # encuentra siempre la solución óptima? Justificar.
 
-# def bolsas(W, objetos):
-#     objetos.sort(reverse=True)
-#     bolsas = []
-#     bolsa_actual = []
-#     for objeto in objetos:
-#         if sum(bolsa_actual) + objeto <= W:
-#             bolsa_actual.append(objeto)
-#         else:
-#             bolsas.append(bolsa_actual)
-#             bolsa_actual = [objeto]
-#     bolsas.append(bolsa_actual)
-#     return bolsas
+def bolsas(W, objetos):
+    objetos.sort(reverse=True)
+    bolsas = []
+    bolsa_actual = []
+    for objeto in objetos:
+        if sum(bolsa_actual) + objeto <= W:
+            bolsa_actual.append(objeto)
+        else:
+            bolsas.append(bolsa_actual)
+            bolsa_actual = [objeto]
+    bolsas.append(bolsa_actual)
+    return bolsas
 
 # print(bolsas(7, [3,3,2,2,2,2]))
 # La complejidad del algoritmo es O(N log N), donde N es el largo de los objetos.
@@ -103,3 +103,30 @@ print("Conjunto Independiente de Suma Máxima:", result)
 # problema de decisión: “¿Se pueden vigilar todas las calles con esta topología con máximo K guardianes?”).
 
 
+# Para demostrar que el problema de gondor, es NP-Completo, primero que nada
+# tenemos que mostrar que el mismo pertenece a NP
+# Para eso creamos un certificador en tiempo polinomial, que dado un k que 
+# representa a la cantidad de guardianes y una solucion
+# verificar que para ese k de guardianes cubren todas las calles de la solucion
+# de esta manera, de forma linea, podemos corroborrar si la solucion es valida o no
+# De esta manera, el problema es NP
+
+# Ahora para demostrar que el mismo tambien es NP-completo,
+# primero creamos una instancia del problema a reducir, que en este caso el que nos sirve
+# es el vertex cover.
+# Dado una instancia de Vertex cover, un grafo no dirigido = (V,E) y un k, transforemos una instancia
+# equivalente del problema de gondor
+#     Cada vertice en V se convertira en una esquina en el reindo de gondor
+#     cada arista en E se convertira en una calle entre las esquinas correspondientes a esos vertices
+#         conectados por la arista
+#     k se mantedra como el numero maximo de guardianes permitidos
+# Se entiende que un conjunto de vertices en VC se traduce directamente en un conjunto de esquinas
+# del reino de gondor
+# Si existe un conjunto k de vertices que cubra todas las aristas, existe un conjunto k de esquinas
+# que cubra todas las calles del reino de gondor
+# Se entiende tambien, al reves que al menos un guardian este en cada calle en gondor se traduce
+# en la condicion de que al menos un extremo de cada arista en el conjunto de vertices en VC
+# De esta manera podemos demostrar que existe un VC de k vertices si y solo si existe una solucion
+# del problema de gondor de k guardianes. Podemos decir que el problema de gondor es al menos
+# tan dificil como el VC y dado que VC es NP-completo, el problema de gondor tambien pertenece
+# a NP-completo

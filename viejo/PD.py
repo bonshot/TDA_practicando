@@ -258,7 +258,7 @@ def bodegon_de_mierda(W, familias_chotas):
             res.append(familias_chotas[i-1])
             j -= familias_chotas[i-1]
         i-=1
-    print(res)
+    print(res[::-1])
     print(mesa[n][W])
     return mesa
         

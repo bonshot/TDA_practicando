@@ -17,6 +17,7 @@
 # es una manera más económica de escribirlo para n = 10, pues sólo tiene dos
 # términos. Además, tener en cuenta que no se piden los términos, sino la cantidad mínima de términos cuadráticos
 # necesaria.
+
 # 4. Realizar una reducción polinomial del problema del ejercicio 3 a otro de los vistos durante la cursada. Ayuda: pensar en
 # alguno de los vistos de programación dinámica.
 
