@@ -1,28 +1,85 @@
 # N Reinas
 # Dado un tablero de ajedrez NxN, ubicar (si es posible) a N reinas de tal
 # manera que ninguna pueda comerse con ninguna
-def es_compatible(grafo, puestos):
-    for v in puestos:
-        for w in puestos:
-            if v == w:
-                continue
-            if grafo.hay_arista(v, w):
+# def es_compatible(grafo, puestos):
+#     for v in puestos:
+#         for w in puestos:
+#             if v == w:
+#                 continue
+#             if grafo.hay_arista(v, w):
+#                 return False
+#     return True
+
+# def _ubicacion_BT(grafo, vertices, v_actual, puestos, n):
+#     if v_actual == len(grafo):
+#         return False
+#     if len(grafo) == n:
+#         return es_compatible(grafo, puestos)
+#     if not es_compatible(grafo, puestos):
+#         return False
+#     puestos.add(vertices[v_actual])
+#     if _ubicacion_BT(grafo, vertices v_actual +1, puestos, n):
+#         return True
+#     puestos.remove(vertices[v_actual])
+#     return _ubicacion_BT(grafo, vertices, v_actual +1, puestos, n)
+
+#*****************************************************************************
+
+#vertex cover k
+def is_vertex_cover(graph, cover):
+    # Verifica si el conjunto de vértices 'cover' cubre todas las aristas en 'graph'
+    for vertex in cover:
+        for neighbor in graph[vertex]:
+            if neighbor not in cover:
                 return False
     return True
 
-def _ubicacion_BT(grafo, vertices, v_actual, puestos, n):
-    if v_actual == len(grafo):
-        return False
-    if len(grafo) == n:
-        return es_compatible(grafo, puestos)
-    if not es_compatible(grafo, puestos):
-        return False
-    puestos.add(vertices[v_actual])
-    if _ubicacion_BT(grafo, vertices v_actual +1, puestos, n):
-        return True
-    puestos.remove(vertices[v_actual])
-    return _ubicacion_BT(grafo, vertices, v_actual +1, puestos, n)
+def backtrack_vertex_cover(graph, k, cover, start=0):
+    # Caso base: si el tamaño del conjunto de vértices es k
+    if k == 0:
+        if is_vertex_cover(graph, cover):
+            print("Vertex Cover:", cover)
+        return
+    
+    # Recorre los vértices del grafo
+    for i in range(start, len(graph)):
+        # Prueba agregar el vértice actual al conjunto de vértices
+        cover.append(i)
+        
+        # Realiza la llamada recursiva con un vértice menos
+        backtrack_vertex_cover(graph, k - 1, cover, i + 1)
+        
+        # Retrocede: deshace la elección del vértice actual
+        cover.pop()
+#*****************************************************************************
+#Vertex cover minimo
+def is_vertex_cover(graph, cover):
+    # Verifica si el conjunto de vértices 'cover' cubre todas las aristas en 'graph'
+    for vertex in cover:
+        for neighbor in graph[vertex]:
+            if neighbor not in cover:
+                return False
+    return True
 
+def backtrack_vertex_cover(graph, cover, current_vertex, result):
+    # Verifica si el conjunto de vértices 'cover' cubre todas las aristas
+    if is_vertex_cover(graph, cover):
+        # Actualiza el resultado si el tamaño del Vertex Cover actual es menor
+        if len(cover) < len(result):
+            result.clear()
+            result.extend(cover)
+        return
+
+    # Recorre los vértices del grafo
+    for vertex in range(current_vertex, len(graph)):
+        # Prueba agregar el vértice actual al conjunto de vértices
+        cover.append(vertex)
+        
+        # Realiza la llamada recursiva con un vértice más
+        backtrack_vertex_cover(graph, cover, vertex + 1, result)
+        
+        # Retrocede: deshace la elección del vértice actual
+        cover.pop()
 #******************************************************************************
 
 # Independent Set
@@ -30,11 +87,59 @@ def _ubicacion_BT(grafo, vertices, v_actual, puestos, n):
 # los cuales guardar cada uno. Restricci´on! Queremos ver de ubicar N
 # elementos sin que hayan dos adyacentes con elementos
 
+def is_safe(node, current_set, graph):
+    for neighbor in graph[node]:
+        if neighbor in current_set:
+            return False
+    return True
+
+def independent_set(graph, current_set, max_set, n):
+    if len(current_set) == n:
+        max_set.clear()
+        max_set.update(current_set)
+        return
+
+    for node in graph:
+        if node not in current_set and is_safe(node, current_set, graph):
+            current_set.add(node)
+            independent_set(graph, current_set, max_set, n)
+            current_set.remove(node)
+
+def find_independent_set(graph, n):
+    max_set = set()
+    current_set = set()
+    independent_set(graph, current_set, max_set, n)
+    return max_set
+
 #******************************************************************************
 
 #Independent sent minimo
 
+def is_safe(node, current_set, graph):
+    for neighbor in graph[node]:
+        if neighbor in current_set:
+            return False
+    return True
 
+def independent_set(graph, current_set, min_set, n):
+    if len(current_set) == n:
+        if len(min_set) == 0 or len(current_set) < len(min_set):
+            min_set.clear()
+            min_set.update(current_set)
+        return
+
+    for node in graph:
+        if node not in current_set and is_safe(node, current_set, graph):
+            current_set.add(node)
+            independent_set(graph, current_set, min_set, n)
+            current_set.remove(node)
+
+def find_min_independent_set(graph, n):
+    min_set = set()
+    current_set = set()
+    independent_set(graph, current_set, min_set, n)
+    return min_set
+    
 #******************************************************************************
 
 # Camino Hamiltoniano
@@ -168,6 +273,22 @@ def horarios_posibles(materias, solucion_parcial):
 # de n dados cuya suma es s. Por ejemplo, con n = 2 y s = 7, debe imprimir
 # [1, 6] [2, 5] [3, 4] [4, 3] [5, 2] [6, 1].
 
+def lanzar_dados(n, s):
+    resultados = []
+    tirada_actual = []
+    backtrack(n, 0, tirada_actual, s, resultados)
+    return resultados
+
+def backtrack(dados_restantes, suma_actual, tirada_actual, s, resultados):
+    if dados_restantes == 0:
+        if suma_actual == s:
+            resultados.append(tirada_actual[:])
+        return
+
+    for cara in range(1, 7):
+        tirada_actual.append(cara)
+        backtrack(dados_restantes - 1, suma_actual + cara, tirada_actual, s, resultados)
+        tirada_actual.pop()
 #******************************************************************************
 
 # Subset Sum
