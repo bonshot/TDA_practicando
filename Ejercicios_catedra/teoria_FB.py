@@ -53,33 +53,79 @@ def backtrack_vertex_cover(graph, k, cover, start=0):
         cover.pop()
 #*****************************************************************************
 #Vertex cover minimo
-def is_vertex_cover(graph, cover):
-    # Verifica si el conjunto de vértices 'cover' cubre todas las aristas en 'graph'
-    for vertex in cover:
-        for neighbor in graph[vertex]:
-            if neighbor not in cover:
-                return False
+def es_seguro(vertice, vertices_no_cubiertos, grafo):
+    for v in vertices_no_cubiertos:
+        if vertice in grafo[v]:
+            return False
     return True
 
-def backtrack_vertex_cover(graph, cover, current_vertex, result):
-    # Verifica si el conjunto de vértices 'cover' cubre todas las aristas
-    if is_vertex_cover(graph, cover):
-        # Actualiza el resultado si el tamaño del Vertex Cover actual es menor
-        if len(cover) < len(result):
-            result.clear()
-            result.extend(cover)
+def backtrack(grafo, vertices_no_cubiertos, vertex_cover_actual, mejor_vertex_cover):
+    if not vertices_no_cubiertos:
+        if len(vertex_cover_actual) < len(mejor_vertex_cover):
+            mejor_vertex_cover.clear()
+            mejor_vertex_cover.extend(vertex_cover_actual)
         return
 
-    # Recorre los vértices del grafo
-    for vertex in range(current_vertex, len(graph)):
-        # Prueba agregar el vértice actual al conjunto de vértices
-        cover.append(vertex)
-        
-        # Realiza la llamada recursiva con un vértice más
-        backtrack_vertex_cover(graph, cover, vertex + 1, result)
-        
-        # Retrocede: deshace la elección del vértice actual
-        cover.pop()
+    vertice = vertices_no_cubiertos.pop()
+    # No incluir el vértice actual
+    backtrack(grafo, vertices_no_cubiertos, vertex_cover_actual, mejor_vertex_cover)
+
+    # Incluir el vértice actual si es seguro
+    if es_seguro(vertice, vertices_no_cubiertos, grafo):
+        vertex_cover_actual.append(vertice)
+        vecinos_cubiertos = set(grafo[vertice])
+        vertices_no_cubiertos -= vecinos_cubiertos
+        backtrack(grafo, vertices_no_cubiertos, vertex_cover_actual, mejor_vertex_cover)
+        vertices_no_cubiertos.add(vertice)
+        vertex_cover_actual.pop()
+
+def encontrar_vertex_cover_minimo(grafo):
+    mejor_vertex_cover = []
+    vertex_cover_actual = []
+    vertices_no_cubiertos = set(grafo.keys())
+    
+    backtrack(grafo, vertices_no_cubiertos, vertex_cover_actual, mejor_vertex_cover)
+
+    return mejor_vertex_cover
+
+def main():
+    grafo = {
+        0: [1, 2],
+        1: [0, 2, 3],
+        2: [0, 1, 3],
+        3: [1, 2]
+    }
+
+    vertex_cover_minimo = encontrar_vertex_cover_minimo(grafo)
+
+    print("Vértice de cobertura mínimo:", vertex_cover_minimo)
+
+if __name__ == "__main__":
+    main()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #******************************************************************************
 
 # Independent Set
@@ -114,32 +160,58 @@ def find_independent_set(graph, n):
 #******************************************************************************
 
 #Independent sent minimo
-
-def is_safe(node, current_set, graph):
-    for neighbor in graph[node]:
-        if neighbor in current_set:
+def es_seguro(vertice, conjunto_independiente, grafo):
+    for vecino in grafo[vertice]:
+        if vecino in conjunto_independiente:
             return False
     return True
 
-def independent_set(graph, current_set, min_set, n):
-    if len(current_set) == n:
-        if len(min_set) == 0 or len(current_set) < len(min_set):
-            min_set.clear()
-            min_set.update(current_set)
+def backtrack(vertice, grafo, conjunto_independiente_actual, mejor_conjunto):
+    if vertice == len(grafo):
+        if len(conjunto_independiente_actual) > len(mejor_conjunto):
+            mejor_conjunto.clear()
+            mejor_conjunto.extend(conjunto_independiente_actual)
         return
 
-    for node in graph:
-        if node not in current_set and is_safe(node, current_set, graph):
-            current_set.add(node)
-            independent_set(graph, current_set, min_set, n)
-            current_set.remove(node)
+    # No incluir el vértice actual
+    backtrack(vertice + 1, grafo, conjunto_independiente_actual, mejor_conjunto)
 
-def find_min_independent_set(graph, n):
-    min_set = set()
-    current_set = set()
-    independent_set(graph, current_set, min_set, n)
-    return min_set
+    # Incluir el vértice actual si es seguro
+    if es_seguro(vertice, conjunto_independiente_actual, grafo):
+        conjunto_independiente_actual.append(vertice)
+        backtrack(vertice + 1, grafo, conjunto_independiente_actual, mejor_conjunto)
+        conjunto_independiente_actual.pop()
+
+def encontrar_conjunto_independiente_minimo(grafo):
+    mejor_conjunto = []
+    conjunto_independiente_actual = []
     
+    backtrack(0, grafo, conjunto_independiente_actual, mejor_conjunto)
+
+    return mejor_conjunto
+
+def main():
+    grafo = {
+        0: [1,2],
+        1: [0],
+        2: [0]
+    }
+
+    conjunto_independiente_minimo = encontrar_conjunto_independiente_minimo(grafo)
+
+    print("Conjunto independiente mínimo:", conjunto_independiente_minimo)
+
+if __name__ == "__main__":
+    main()
+
+
+
+
+
+
+
+
+
 #******************************************************************************
 
 # Camino Hamiltoniano
