@@ -331,7 +331,40 @@
 # Se pide: Demostrar que el problema es NP-Completo.
 # HINT: El problema se puede ver como “Node-disjoint directed path
 # problem”. Pruebe con “3-SAT”
+# Para demostrar que el problema es NP, necesitamos mostrar que, dada una solución propuesta, podemos verificar en tiempo polinómico si es válida. 
+# En este caso, dado un conjunto de caminos en el grafo, queremos verificar si cada camino es válido (no se cruzan con otros caminos) 
+# y si conectan el punto de inicio con el punto de finalización.
 
+# La verificación se puede hacer en tiempo polinómico de la siguiente manera:
+
+# No se cruzan: Para cada par de caminos, verificamos si comparten algún vértice en común. 
+# Si es así, entonces los caminos se cruzan y la solución no es válida.
+
+# Conectividad: Verificamos que cada camino conecta el punto de inicio con el punto de finalización. 
+# Esto se puede hacer siguiendo los arcos del grafo y asegurándonos de que hay un camino dirigido desde el punto de inicio hasta el punto de finalización para cada camino.
+
+# La verificación de estas condiciones se puede realizar en tiempo polinómico respecto al tamaño del grafo y el número de caminos propuestos. 
+# Por lo tanto, el problema de decidir si un conjunto de caminos satisface las condiciones requeridas para el circuito es un problema en NP.
+
+# Reducción:
+
+# Dado una instancia del problema 3-SAT, construimos un grafo dirigido de la siguiente manera:
+
+# Para cada variable booleana y su negación, creamos dos nodos en capas consecutivas.
+
+# Para cada cláusula de 3 literales, conectamos los nodos correspondientes a esos literales en el orden de la cláusula.
+
+# Agregamos nodos fuente y sumidero para representar los puntos de inicio y finalización de los caminos.
+
+# Demostración:
+
+# a. Si hay una asignación de verdad: Para cada cláusula verdadera, seleccionamos el camino correspondiente en el grafo.
+
+# b. Si no hay una asignación de verdad: En cualquier camino seleccionado, al menos una cláusula no será satisfecha, 
+#     lo que significa que al menos un arco en el camino no será atravesado.
+
+# La reducción es polinómica y muestra que el problema del "Node-disjoint directed path" es NP-Completo. 
+# Esto implica que el problema original de construir los caminos en el circuito es también NP-Completo.
 #*************************************************************
 
 # La siguiente es una versión de Conjunto Independiente. 
@@ -341,6 +374,28 @@
 # Probar que el problema de Conjuntos Fuertemente Independientes es NP completo. 
 # Utilizar para ello que Conjuntos Independientes es NP completo.
 
+# Dada una instancia (G, k) del problema de Conjuntos Independientes, donde G es un grafo y k es un entero, construimos una nueva instancia (G', k') 
+# para el problema de Conjuntos Fuertemente Independientes de la siguiente manera:
+
+# Para cada vértice v en G, creamos dos vértices v1 y v2 en G'.
+# Para cada arista (u, v) en G, agregamos las aristas (u1, v2) y (v1, u2) en G'.
+# La nueva instancia será (G', k'), donde k' = k.
+
+# Ahora, observemos que:
+
+# Si G tiene un conjunto independiente de tamaño al menos k, entonces G' tendrá un conjunto fuertemente independiente de tamaño al menos k.
+
+# Demostración: Supongamos que I es un conjunto independiente en G de tamaño al menos k. Entonces, en G', el conjunto I' 
+# formado por todos los vértices v1 en G' (donde v pertenece a I) es un conjunto fuertemente independiente de tamaño al menos k.
+
+# Si G' tiene un conjunto fuertemente independiente de tamaño al menos k, entonces G tiene un conjunto independiente de tamaño al menos k.
+
+# Demostración: Supongamos que I' es un conjunto fuertemente independiente en G' de tamaño al menos k. Entonces, el conjunto I formado por todos los vértices v en G 
+# (donde v1 pertenece a I') es un conjunto independiente en G de tamaño al menos k.
+
+# Esto demuestra que la reducción es correcta. Dado que la reducción se puede realizar en tiempo polinómico, 
+# y ya sabemos que el problema de Conjuntos Independientes es NP-completo, podemos concluir que el problema de Conjuntos Fuertemente Independientes también es NP-completo.
+
 #*************************************************************
 
 # Una compañía multinacional desea contratar cobertura satelital para sus “n” sedes repartidas por el mundo. 
@@ -348,10 +403,22 @@
 # Les gustaría poder contratar a “k” o menos empresas. Pero tienen una condición adicional: al menos una de sus sedes debe tener cobertura de todas las empresas que la ofrecen. 
 # Con eso pueden iniciar una certificación de calidad que necesitan. Se pide: Demostrar que el problema es NP-Completo. Sugerencia: Utilizar Set Cover
 
-#*************************************************************
+# Conjuntos y Elementos:
 
-# El directorio de una empresa realizará una cena de fin de año. En total son “n” directivos que se deben sentar alrededor de una mesa circular. 
-# Lamentablemente existen conflictos entre algunos de ellos que impiden que se sienten uno al lado del otro. Dado una instancia del problema, 
-# que incluye los n directivos y un listado donde se ven aquellos pares de directivos que están peleados entre sí, determinar si es posible sentarse en la mesa. 
-# Demostrar que el problema es NP-C. Sugerencia: Utilizar ciclo Hamiltoniano.
+# Los conjuntos en Set Cover serán las empresas que ofrecen cobertura satelital.
+# Los elementos en Set Cover serán las sedes de la compañía multinacional.
+# Condiciones:
+
+# Cada conjunto (empresa) cubre ciertas sedes.
+# La unión de todos los conjuntos debe cubrir todas las sedes.
+# Parámetros:
+
+# El parámetro 
+# k en Set Cover se traducirá al número máximo de empresas que la compañía multinacional está dispuesta a contratar.
+# Con esta correspondencia, el problema de Set Cover se reduce al problema de contratar cobertura satelital descrito. 
+# Si podemos resolver el problema de contratar cobertura satelital eficientemente, también podemos resolver Set Cover eficientemente.
+
+# Por lo tanto, el problema de contratar cobertura satelital es NP-Completo.
+
+#*************************************************************
 

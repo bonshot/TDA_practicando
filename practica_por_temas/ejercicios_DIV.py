@@ -131,6 +131,51 @@ def cuadrado_mas_cercano(n):
 # Ejemplo: P1 le gana a P3, P2  le gana a P1 y P3 le gana a P2. Solución: [P1, P3, P2]. 
 # Resolver por división y conquista con una complejidad no mayor a O(n log n).
 
+def merge(left, right):
+    result = []
+    i = j = 0
+    while i < len(left) and j < len(right):
+        # Comparar el resultado del partido entre left[i] y right[j]
+        # Agregar el ganador a la lista result
+        if resultado(left[i], right[j]) == 'GanaIzquierda':
+            result.append(left[i])
+            i += 1
+        else:
+            result.append(right[j])
+            j += 1
+
+    # Agregar los jugadores restantes
+    result.extend(left[i:])
+    result.extend(right[j:])
+    return result
+
+def ordenar_jugadores(jugadores):
+    if len(jugadores) <= 1:
+        return jugadores
+
+    # Dividir
+    mid = len(jugadores) // 2
+    left = jugadores[:mid]
+    right = jugadores[mid:]
+
+    # Conquistar (ordenar recursivamente)
+    left = ordenar_jugadores(left)
+    right = ordenar_jugadores(right)
+
+    # Combinar
+    return merge(left, right)
+
+def resultado(jugador1, jugador2):
+    # Implementar la lógica para determinar quién gana
+    # Puedes usar la matriz de resultados para esto
+    # Devolver 'GanaIzquierda' si jugador1 le gana a jugador2
+    # Devolver 'GanaDerecha' si jugador2 le gana a jugador1
+    # Ajusta esto según la estructura exacta de tus datos
+    pass
+# Ejemplo de uso
+# jugadores = ["P1", "P2", "P3", ..., "Pn"]
+# jugadores_ordenados = ordenar_jugadores(jugadores)
+# print(jugadores_ordenados)
 # Se cuenta con un vector V de “n” elementos. Este vector visto de forma circular está ordenado. 
 # Pero no necesariamente en la posición inicial se encuentra el elemento más pequeño. 
 # Deseamos conocer la cantidad total de rotaciones que presenta “V”. 
@@ -138,13 +183,36 @@ def cuadrado_mas_cercano(n):
 # Podemos hacerlo en tiempo O(n) por fuerza bruta. 
 # Presentar una solución utilizando división y conquista que mejore esta complejidad.
 
-# Una encuesta de internet pidió a personas que ordenen un conjunto de “n” películas 
-# comenzando por las que más les gusta a las que menos. 
-# Con los resultados quieren encontrar quienes comparten gustos entre sí. 
-# Nos solicitan generar un algoritmo, que basándose en el concepto de inversión, 
-# compare entre pares de personas y determine qué tan compatibles o incompatibles son. 
-# Proponer un algoritmo utilizando división y conquista que lo resuelva.
+def find_rotation_point(arr, low, high):
+    if high < low:
+        return -1
 
-# Dado “L” un listado ordenado de “n” elementos y un elemento “e” determinado. Deseamos conocer la cantidad total de veces que “e” se encuentra en “L”. 
-# Podemos hacerlo en tiempo O(n) por fuerza bruta. 
-# Presentar una solución utilizando división y conquista que mejore esta complejidad.
+    if high == low:
+        return low
+
+    mid = (low + high) // 2
+
+    if mid < high and arr[mid] > arr[mid + 1]:
+        return mid + 1
+
+    if mid > low and arr[mid] < arr[mid - 1]:
+        return mid
+
+    if arr[low] >= arr[mid]:
+        return find_rotation_point(arr, low, mid - 1)
+
+    return find_rotation_point(arr, mid + 1, high)
+
+def count_rotations(arr):
+    n = len(arr)
+    rotation_point = find_rotation_point(arr, 0, n - 1)
+
+    if rotation_point == -1:
+        return 0
+
+    return rotation_point
+
+# Ejemplo de uso:
+V = [6, 7, 9, 2, 4, 5]
+rotations = count_rotations(V)
+print(f"El vector está rotado en {rotations} posiciones.")
