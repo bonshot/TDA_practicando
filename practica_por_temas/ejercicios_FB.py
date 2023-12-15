@@ -214,6 +214,43 @@ def asignar_escenas(servidores, escenas):
 # Un ciclo euleriano en un grafo es un camino que pasa por cada arista una y solo una vez, comenzando por un vértice y finalizando en el mismo. 
 # Sea un grafo G=(V,E) se busca generar si es posible un ciclo euleriano. Resolverlo mediante generar y probar. 
 
+def dfs(actual, camino, visitadas, grafo):
+    camino.append(actual)
+
+    for vecino in grafo[actual]:
+        if (actual, vecino) not in visitadas and (vecino, actual) not in visitadas:
+            visitadas.add((actual, vecino))
+            visitadas.add((vecino, actual))
+            dfs(vecino, camino, visitadas, grafo)
+
+    return camino
+
+def ciclo_euleriano(grafo):
+    visitadas = set()
+    inicio = list(grafo.keys())[0]
+    ciclo = dfs(inicio, [], visitadas, grafo)
+
+    # Verificar si se visitaron todas las aristas
+    total_aristas = sum(len(vecinos) for vecinos in grafo.values()) // 2
+    if len(ciclo) == total_aristas + 1:
+        return ciclo
+    else:
+        return None
+
+# Ejemplo de uso
+grafo_ejemplo = {
+    'A': ['B', 'C'],
+    'B': ['A', 'C'],
+    'C': ['A', 'B']
+}
+
+ciclo = ciclo_euleriano(grafo_ejemplo)
+
+if ciclo:
+    print("Ciclo Euleriano encontrado:", ciclo)
+else:
+    print("No hay ciclo Euleriano en el grafo.")
+
 #*********************************************************************************************
 
 # Resuelva el problema de las reinas en el tablero de ajedrez mediante backtracking planteado como permutaciones. 

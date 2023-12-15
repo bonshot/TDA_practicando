@@ -311,6 +311,12 @@
 # y solo si hay un Set packing de al menos un tamaño
 # k' y asi mostramos que el problema tambien es NP-completo
 
+
+
+
+
+
+
 #**************************************************************OTRO DIA
 
 # Para el desarrollo de un circuito digital se requiere construir

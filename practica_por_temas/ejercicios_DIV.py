@@ -115,6 +115,12 @@ def cuadrado_mas_cercano(n):
             resultado = medio_cuadrado #Esta la posibilidad de que el cuadrado que busco sea este
     return resultado
 
+
+
+
+
+
+
 #*****************************************
 
 # Se realiza un torneo con n jugadores en el cual cada jugador juega con todos los otros n-1. 
